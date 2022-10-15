@@ -1,3 +1,5 @@
+import 'package:f_shopping_app/ui/pages/home_page.dart';
+import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +12,7 @@ class logo extends StatelessWidget {
       body: Container(
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center, 
             children: [
               Image.asset(
                 'images/logo.jpg',
@@ -20,13 +22,17 @@ class logo extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'Welcome to the GlApp',
+              new GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Login(),));
+                },
+                child: new Text('Welcome to the GlApp',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                ),
+                ),),
               ),
+              
             ],
           ),
         ),
