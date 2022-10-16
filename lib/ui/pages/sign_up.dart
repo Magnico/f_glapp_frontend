@@ -13,7 +13,7 @@ class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
   
   @override
-  SignUp_Form createState() => SignUp_Form();
+  State<SignUp> createState() => SignUp_Form();
   
 }
 
