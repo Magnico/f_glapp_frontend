@@ -1,8 +1,6 @@
-
-
 import 'package:f_shopping_app/ui/pages/home_page.dart';
+import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:f_shopping_app/ui/pages/product_list.dart';
-import 'package:f_shopping_app/ui/pages/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -11,26 +9,132 @@ import '../Widgets/banner.dart';
 import '../Widgets/cart_total.dart';
 
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class SignUp extends StatefulWidget {
+  const SignUp({Key? key}) : super(key: key);
   
   @override
-  Login_Form createState() => Login_Form();
+  SignUp_Form createState() => SignUp_Form();
   
 }
 
-class Login_Form extends State<Login> {
+class SignUp_Form extends State<SignUp> {
   
   @override
   Widget build(BuildContext context) {
     return new Scaffold(body:  Column(
       children: [
-        Image.network("https://www.prajwaldesai.com/wp-content/uploads/2021/02/Find-Users-Last-Logon-Time-using-4-Easy-Methods.jpg", height: 300,width: 300,),
+        Image.network("https://media.istockphoto.com/vectors/sign-up-icon-isolated-on-white-background-vector-illustration-vector-id1193039142?k=20&m=1193039142&s=612x612&w=0&h=e53ulqLdsZowR7K4kuoI8OoVwi8IbPff1CKHKNPmGBw=", height: 300,width: 300,),
         const SizedBox(
           
           
         ),
         
+
+          new Row(
+            children: <Widget>[
+              new Expanded(
+                child: new Padding(
+                  padding: const EdgeInsets.only(left: 40.0),
+                  child: new Text(
+                    "NAME",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 82, 122, 255),
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        Container(
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                    color: Color.fromARGB(255, 82, 122, 255),
+                    width: 0.5,
+                    style: BorderStyle.solid),
+              ),
+            ),
+           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+            child: new Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                new Expanded(
+                  child: TextField(
+                    
+                    textAlign: TextAlign.left,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'ingresa tu nombre completo',
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Divider(
+            height: 24.0,
+          ),
+          new Row(
+            children: <Widget>[
+              new Expanded(
+                child: new Padding(
+                  padding: const EdgeInsets.only(left: 40.0),
+                  child: new Text(
+                    "IDENTIFICACIÓN",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 82, 122, 255),
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        Container(
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                    color: Color.fromARGB(255, 82, 122, 255),
+                    width: 0.5,
+                    style: BorderStyle.solid),
+              ),
+            ),
+           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+            child: new Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                new Expanded(
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    
+                    textAlign: TextAlign.left,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'ingresa el numero de identificación ',
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Divider(
+            height: 24.0,
+          ),
 
           new Row(
             children: <Widget>[
@@ -68,11 +172,11 @@ class Login_Form extends State<Login> {
               children: <Widget>[
                 new Expanded(
                   child: TextField(
-                    obscureText: true,
+                    keyboardType: TextInputType.emailAddress,
                     textAlign: TextAlign.left,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'glapp@gmail.com',
+                      hintText: 'ingresa tu correo electronico',
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
                   ),
@@ -81,19 +185,20 @@ class Login_Form extends State<Login> {
             ),
           ),
 
-          Divider(
+                    Divider(
             height: 24.0,
           ),
+
           new Row(
             children: <Widget>[
               new Expanded(
                 child: new Padding(
                   padding: const EdgeInsets.only(left: 40.0),
                   child: new Text(
-                    "PASSWORD",
+                    "CONTRASEÑA",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 82, 125, 255),
+                      color: Color.fromARGB(255, 82, 122, 255),
                       fontSize: 15.0,
                     ),
                   ),
@@ -101,30 +206,31 @@ class Login_Form extends State<Login> {
               ),
             ],
           ),
-          new Container(
+        Container(
             width: MediaQuery.of(context).size.width,
             margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                    color: Color.fromARGB(255, 82, 131, 255),
+                    color: Color.fromARGB(255, 82, 122, 255),
                     width: 0.5,
                     style: BorderStyle.solid),
               ),
             ),
-            padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
             child: new Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 new Expanded(
                   child: TextField(
-                    obscureText: true,
+                    keyboardType: TextInputType.visiblePassword,
+                    
                     textAlign: TextAlign.left,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: '*********',
+                      hintText: 'crea una nueva contraseña',
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
                   ),
@@ -133,30 +239,64 @@ class Login_Form extends State<Login> {
             ),
           ),
 
-
-          Divider(
+                    Divider(
             height: 24.0,
           ),
+
           new Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: new FlatButton(
+              new Expanded(
+                child: new Padding(
+                  padding: const EdgeInsets.only(left: 40.0),
                   child: new Text(
-                    "Forgot Password?",
+                    "ROLE",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 82, 117, 255),
+                      color: Color.fromARGB(255, 82, 122, 255),
                       fontSize: 15.0,
                     ),
-                    textAlign: TextAlign.end,
                   ),
-                  onPressed: () => {},
                 ),
               ),
             ],
           ),
+        Container(
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                    color: Color.fromARGB(255, 82, 122, 255),
+                    width: 0.5,
+                    style: BorderStyle.solid),
+              ),
+            ),
+           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+            child: new Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                new Expanded(
+                  child: TextField(
+                    keyboardType: TextInputType.visiblePassword,
+                    
+                    textAlign: TextAlign.left,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'ingrese rol "Usuario" o "Empresa"',
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Divider(
+            height: 24.0,
+          ),
+          
           new Container(
             width: MediaQuery.of(context).size.width,
             margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
@@ -172,7 +312,7 @@ class Login_Form extends State<Login> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const HomePage()),
+                        MaterialPageRoute(builder: (context) => const Login()),
                       );
                     },
                     child: new Container(
@@ -186,7 +326,7 @@ class Login_Form extends State<Login> {
                           
                           new Expanded(
                             child: Text(
-                              "LOGIN",
+                              "SAVE",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.white,
@@ -201,78 +341,7 @@ class Login_Form extends State<Login> {
               ],
             ),
           ),
-          new Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
-            alignment: Alignment.center,
-            child: Row(
-              children: <Widget>[
-                new Expanded(
-                  child: new Container(
-                    margin: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(border: Border.all(width: 0.25)),
-                  ),
-                ),
-                Text(
-                  "OR ",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                new Expanded(
-                  child: new Container(
-                    margin: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(border: Border.all(width: 0.25)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-         new Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
-            alignment: Alignment.center,
-            child: new Row(
-              children: <Widget>[
-                new Expanded(
-                  child: new FlatButton(
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
-                    ),
-                    color: Color.fromARGB(255, 82, 125, 255),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const SignUp()),
-                      );
-                    },
-                    child: new Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 20.0,
-                        horizontal: 20.0,
-                      ),
-                      child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          new Expanded(
-                            child: Text(
-                              "SIGN UP",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-         
+          
 
 
       ]
