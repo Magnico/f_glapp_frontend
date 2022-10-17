@@ -1,12 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.f_shopping_app">
+   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+   <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
    <application
         android:label="f_shopping_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
     
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAu7onFQVEg6K4GmU1--22MhuYv3OM4qn8"/>
+            android:value="AIzaSyB9NLDNfBdWb-PPUa9e-q6FzTP8xrranAI"/>
 
         <activity
             android:name=".MainActivity"
