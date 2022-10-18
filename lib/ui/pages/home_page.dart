@@ -104,11 +104,17 @@ class HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appbar with search bar
-      appBar: AppBar(
-        title: const Text('F-Shopping'),
-        backgroundColor: Colors.blue,
-        actions: <Widget>[
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await _determinePosition();
+          final GoogleMapController controller = await _controller.future;
+          controller.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(target: currentLocation, zoom: 3)));
+        },
+        child: const Icon(Icons.location_searching),
+      ),
+      body:  Stack(
+        children: [
           TextField(
             controller: searchTextController,
             autofocus: false,
@@ -130,19 +136,6 @@ class HomeState extends State<HomePage> {
               
             },
             ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await _determinePosition();
-          final GoogleMapController controller = await _controller.future;
-          controller.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: currentLocation, zoom: 3)));
-        },
-        child: const Icon(Icons.location_searching),
-      ),
-      body:  Stack(
-        children: [
           GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition:
