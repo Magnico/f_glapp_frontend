@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:f_shopping_app/ui/pages/reportes.dart';
 import 'package:f_shopping_app/ui/pages/usuario.dart';
+import 'package:google_place/google_place.dart';
 
 LatLng currentLocation = LatLng(25.1193, 55.3773);
 final Completer<GoogleMapController> _controller = Completer();
@@ -21,6 +22,12 @@ class HomeState extends State<HomePage> {
   BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
   int actual = 0;
+
+  late GooglePlace _googlePlace;
+  List<AutocompletePrediction> _places = [];
+  final searchTextController = TextEditingController();
+  Timer? _debounce;
+
   List<Widget> paginas = [
     HomePage(),
     Report(),
@@ -41,7 +48,19 @@ class HomeState extends State<HomePage> {
   void initState() {
     super.initState();
     _determinePosition();
+    String apiKey = 'AIzaSyB9NLDNfBdWb-PPUa9e-q6FzTP8xrranAI';
+    _googlePlace = GooglePlace(apiKey);
     
+  }
+
+  autocompleteSearch(String value) async{
+    var result = await _googlePlace.autocomplete.get(value);
+    if(result!= null && result.predictions!=null && mounted){
+      print(result.predictions!.first.description);
+      setState(() {
+        _places = result.predictions!;
+      });
+    }
   }
 
   Future<void> _determinePosition() async {
@@ -85,6 +104,34 @@ class HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //appbar with search bar
+      appBar: AppBar(
+        title: const Text('F-Shopping'),
+        backgroundColor: Colors.blue,
+        actions: <Widget>[
+          TextField(
+            controller: searchTextController,
+            autofocus: false,
+            decoration: const InputDecoration(
+              hintText: 'Buscar',
+              hintStyle: TextStyle(color: Colors.red),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.red,
+              ),
+            ),
+            onChanged: (value) {
+              if (_debounce?.isActive ?? false) _debounce!.cancel();
+              _debounce = Timer(const Duration(milliseconds: 1000), () {
+                if (value.isNotEmpty) {
+                  autocompleteSearch(value);
+                }
+              });
+              
+            },
+            ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _determinePosition();
@@ -94,7 +141,9 @@ class HomeState extends State<HomePage> {
         },
         child: const Icon(Icons.location_searching),
       ),
-      body: GoogleMap(
+      body:  Stack(
+        children: [
+          GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition:
             CameraPosition(target: currentLocation, zoom: 15),
@@ -113,6 +162,8 @@ class HomeState extends State<HomePage> {
             ),
           )
         },
+      )
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
