@@ -167,7 +167,7 @@ class HomeState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Color(0xFF6200EE),
+        backgroundColor: Color.fromARGB(255, 47, 91, 223),
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white.withOpacity(.60),
         selectedFontSize: 14,
