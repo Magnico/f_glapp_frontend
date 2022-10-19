@@ -3,6 +3,7 @@ class Report {
   double lat;
   double lng;
   int bitmap;
+  String name;
 
-  Report(this.id, this.lng, this.lat, this.bitmap);
+  Report(this.id, this.lng, this.lat, this.bitmap, this.name);
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'dart:math';
 
-import 'package:f_shopping_app/ui/controller/PurchaseController.dart';
+import 'package:f_shopping_app/ui/controller/ReportController.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -36,8 +37,6 @@ class HomeState extends State<HomePage> {
   DetailsResult? _placeDetails;
   late FocusNode _searchFocusNode;
 
-  PurchaseController con = Get.find<PurchaseController>();
-
   List<Widget> paginas = [
     HomePage(),
     Report(),
@@ -47,18 +46,17 @@ class HomeState extends State<HomePage> {
 
   //initializing the reports icons map
   void loadReportsIcons() async {
-    try{
-      IconSet[0] = await BitmapDescriptor.fromAssetImage(
-          ImageConfiguration(devicePixelRatio: 2.5), 'assets/images/water.png');
-      IconSet[1] = await BitmapDescriptor.fromAssetImage(
-          ImageConfiguration(devicePixelRatio: 2.5), 'assets/images/light.png');
-      IconSet[2] = await BitmapDescriptor.fromAssetImage(
-          ImageConfiguration(devicePixelRatio: 2.5), 'assets/images/gas.png');
-    }catch(e){
       IconSet[0] = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
       IconSet[1] = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
       IconSet[2] = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
-    }
+    /*
+      IconSet[0] = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5), 'images/water.png');
+      IconSet[1] = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5), 'images/light.png');
+      IconSet[2] = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5), 'images/gas.png');
+    */
   }
 
   @override
@@ -136,6 +134,7 @@ class HomeState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    ReportController con = Get.find<ReportController>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 47, 91, 223),
@@ -171,10 +170,11 @@ class HomeState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await loadActualPosition();
-          final GoogleMapController controller = await _controller.future;
-          controller.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: currentLocation, zoom: 15)));
+          if(_placeDetails!= null){
+            var type = Random().nextInt(3);
+            con.addReport(type, con.giveName(type), _placeDetails!.geometry!.location!.lat!, _placeDetails!.geometry!.location!.lng!);
+          }
+          focusMap();
         },
         child: const Icon(Icons.location_searching),
       ),
@@ -200,6 +200,7 @@ class HomeState extends State<HomePage> {
                             _placeDetails!.geometry!.location!.lat!,
                             _placeDetails!.geometry!.location!.lng!);
                         _places = [];
+                        _searchFocusNode.unfocus();
                       });
                       focusMap();
                     }
@@ -227,7 +228,7 @@ class HomeState extends State<HomePage> {
                   title: 'Mi Ubicación',
                 ),
               ),
-              //iterar sobre la lista de reportes del Purchasecontroller
+              //iterar sobre la lista de reportes del ReportController
               for (var report in con.reportes)
                 Marker(
                   draggable: false,
@@ -236,8 +237,7 @@ class HomeState extends State<HomePage> {
                   icon: BitmapDescriptor.defaultMarkerWithHue(
                       BitmapDescriptor.hueRed),
                   infoWindow: InfoWindow(
-                    title: report.name,
-                    snippet: report.description,
+                    title: report.name
                   ),
                 ),
             },
