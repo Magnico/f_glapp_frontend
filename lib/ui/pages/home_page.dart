@@ -41,7 +41,7 @@ class HomeState extends State<HomePage> {
     HomePage(),
     Report(),
     HomePage(),
-    Usuario(),
+    ProfilePage(),
   ];
 
   //initializing the reports icons map

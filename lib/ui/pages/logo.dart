@@ -23,7 +23,7 @@ class logo extends StatelessWidget {
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Login(),));
               },
-              child: const Text('Welcome to the GlApp',
+              child: const Text('Bienvenido a GlApp continuar ->',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,

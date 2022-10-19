@@ -2,6 +2,7 @@
 
 import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/sign_up.dart';
+import 'package:f_shopping_app/ui/pages/usuario.dart';
 import 'package:flutter/material.dart';
 
 
