@@ -19,7 +19,9 @@ class Login_Form extends State<Login> {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body:  Column(
+    return Scaffold(resizeToAvoidBottomInset: false,
+      body:  ListView(
+      
       children: [
         Image.network("https://www.prajwaldesai.com/wp-content/uploads/2021/02/Find-Users-Last-Logon-Time-using-4-Easy-Methods.jpg", height: 300,width: 300,),
         const SizedBox(

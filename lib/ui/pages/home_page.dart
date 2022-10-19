@@ -176,7 +176,7 @@ class HomeState extends State<HomePage> {
           }
           focusMap();
         },
-        child: const Icon(Icons.location_searching),
+        child: const Icon(Icons.add),
       ),
       body: Column(
         children: [

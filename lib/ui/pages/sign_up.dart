@@ -15,7 +15,8 @@ class SignUp_Form extends State<SignUp> {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body:  Column(
+    return Scaffold(resizeToAvoidBottomInset:false,
+      body:  ListView(
       children: [
         Image.network("https://media.istockphoto.com/vectors/sign-up-icon-isolated-on-white-background-vector-illustration-vector-id1193039142?k=20&m=1193039142&s=612x612&w=0&h=e53ulqLdsZowR7K4kuoI8OoVwi8IbPff1CKHKNPmGBw=", height: 300,width: 300,),
         const SizedBox(
