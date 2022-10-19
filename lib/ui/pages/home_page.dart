@@ -1,13 +1,15 @@
 import 'dart:async';
 
+import 'package:f_shopping_app/ui/controller/PurchaseController.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:f_shopping_app/ui/pages/reportes.dart';
 import 'package:f_shopping_app/ui/pages/usuario.dart';
 import 'package:google_place/google_place.dart';
 
-LatLng currentLocation = LatLng(25.1193, 55.3773);
+LatLng currentLocation = LatLng(0, 0);
 final Completer<GoogleMapController> _controller = Completer();
 
 class HomePage extends StatefulWidget {
@@ -19,14 +21,22 @@ class HomePage extends StatefulWidget {
 
 class HomeState extends State<HomePage> {
   //set custom marker pins
-  BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
+  List<BitmapDescriptor> IconSet = [
+    BitmapDescriptor.defaultMarker,
+    BitmapDescriptor.defaultMarker,
+    BitmapDescriptor.defaultMarker
+  ];
   int actual = 0;
 
   late GooglePlace _googlePlace;
   List<AutocompletePrediction> _places = [];
   final searchTextController = TextEditingController();
   Timer? _debounce;
+
+  DetailsResult? _placeDetails;
+  late FocusNode _searchFocusNode;
+
+  PurchaseController con = Get.find<PurchaseController>();
 
   List<Widget> paginas = [
     HomePage(),
@@ -35,35 +45,51 @@ class HomeState extends State<HomePage> {
     Usuario(),
   ];
 
-  //initializing the source and destination markers
-  void setSourceAndDestinationIcons() async {
-    sourceIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 2.5), 'images/marker.png');
-    destinationIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 2.5), 'images/marker.png');
+  //initializing the reports icons map
+  void loadReportsIcons() async {
+    try{
+      IconSet[0] = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5), 'assets/images/water.png');
+      IconSet[1] = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5), 'assets/images/light.png');
+      IconSet[2] = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5), 'assets/images/gas.png');
+    }catch(e){
+      IconSet[0] = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
+      IconSet[1] = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
+      IconSet[2] = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
+    }
   }
 
-  //ejecutar _determinePosition() cuando se inicie el estado
   @override
   void initState() {
     super.initState();
-    _determinePosition();
     String apiKey = 'AIzaSyB9NLDNfBdWb-PPUa9e-q6FzTP8xrranAI';
     _googlePlace = GooglePlace(apiKey);
+
+    loadActualPosition();
+    loadReportsIcons();
     
+    _searchFocusNode = FocusNode();
   }
 
-  autocompleteSearch(String value) async{
+  @override
+  void dispose() {
+    super.dispose();
+    _searchFocusNode.dispose();
+    _controller.future.then((controller) => controller.dispose());
+  }
+
+  autocompleteSearch(String value) async {
     var result = await _googlePlace.autocomplete.get(value);
-    if(result!= null && result.predictions!=null && mounted){
-      print(result.predictions!.first.description);
+    if (result != null && result.predictions != null && mounted) {
       setState(() {
         _places = result.predictions!;
       });
     }
   }
 
-  Future<void> _determinePosition() async {
+  Future<void> loadActualPosition() async {
     // Test if location services are enabled.
     var serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -98,64 +124,124 @@ class HomeState extends State<HomePage> {
     setState(() {
       currentLocation = LatLng(position.latitude, position.longitude);
     });
+    focusMap();
     return;
+  }
+
+  void focusMap() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: currentLocation, zoom: 15)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 47, 91, 223),
+        //cuando retorne a la pantalla principal, dispose el controlador
+        automaticallyImplyLeading: false,
+        actions: [
+          //search field
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: TextField(
+              focusNode: _searchFocusNode,
+              controller: searchTextController,
+              decoration: const InputDecoration(
+                hintText: 'Ingrese su ubicación',
+                hintStyle: TextStyle(color: Colors.white),
+                prefixIcon: Icon(Icons.search, color: Colors.white),
+              ),
+              onChanged: (value) {
+                if (_debounce?.isActive ?? false) _debounce!.cancel();
+                _debounce = Timer(const Duration(milliseconds: 1000), () {
+                  if (value.isNotEmpty) {
+                    autocompleteSearch(value);
+                  } else {
+                    setState(() {
+                      _places = [];
+                    });
+                  }
+                });
+              },
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await _determinePosition();
+          await loadActualPosition();
           final GoogleMapController controller = await _controller.future;
           controller.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: currentLocation, zoom: 3)));
+              CameraPosition(target: currentLocation, zoom: 15)));
         },
         child: const Icon(Icons.location_searching),
       ),
-      body:  Stack(
+      body: Column(
         children: [
-          TextField(
-            controller: searchTextController,
-            autofocus: false,
-            decoration: const InputDecoration(
-              hintText: 'Buscar',
-              hintStyle: TextStyle(color: Colors.red),
-              prefixIcon: Icon(
-                Icons.search,
-                color: Colors.red,
-              ),
-            ),
-            onChanged: (value) {
-              if (_debounce?.isActive ?? false) _debounce!.cancel();
-              _debounce = Timer(const Duration(milliseconds: 1000), () {
-                if (value.isNotEmpty) {
-                  autocompleteSearch(value);
-                }
-              });
-              
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: _places.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: const Icon(Icons.location_on),
+                title: Text(_places[index].description!.toString()),
+                onTap: () async {
+                  final placeId = _places[index].placeId;
+                  final details = await _googlePlace.details.get(placeId!);
+                  if (details != null && details.result != null && mounted) {
+                    if (_searchFocusNode.hasFocus) {
+                      setState(() {
+                        _placeDetails = details.result;
+                        searchTextController.text = _placeDetails!.name!;
+                        //usar placeDetails para obtener la ubicación
+                        currentLocation = LatLng(
+                            _placeDetails!.geometry!.location!.lat!,
+                            _placeDetails!.geometry!.location!.lng!);
+                        _places = [];
+                      });
+                      focusMap();
+                    }
+                  }
+                },
+              );
             },
-            ),
-          GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition:
-            CameraPosition(target: currentLocation, zoom: 15),
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-          setSourceAndDestinationIcons();
-        },
-        markers: <Marker>{
-          Marker(
-            draggable: true,
-            markerId: const MarkerId("1"),
-            position: currentLocation,
-            icon: sourceIcon,
-            infoWindow: const InfoWindow(
-              title: 'My Location',
-            ),
-          )
-        },
-      )
+          ),
+          Expanded(
+              child: GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition:
+                CameraPosition(target: currentLocation, zoom: 15),
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+            markers: <Marker>{
+              Marker(
+                draggable: false,
+                markerId: const MarkerId("ME"),
+                position: currentLocation,
+                icon: BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueGreen),
+                infoWindow: const InfoWindow(
+                  title: 'Mi Ubicación',
+                ),
+              ),
+              //iterar sobre la lista de reportes del Purchasecontroller
+              for (var report in con.reportes)
+                Marker(
+                  draggable: false,
+                  markerId: MarkerId(report.id.toString()),
+                  position: LatLng(report.lat, report.lng),
+                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueRed),
+                  infoWindow: InfoWindow(
+                    title: report.name,
+                    snippet: report.description,
+                  ),
+                ),
+            },
+          ))
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -197,5 +283,4 @@ class HomeState extends State<HomePage> {
       ),
     );
   }
-  
 }

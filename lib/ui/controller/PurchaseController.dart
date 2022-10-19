@@ -1,39 +1,32 @@
-import 'package:f_shopping_app/domain/product.dart';
+import 'package:f_shopping_app/domain/report.dart';
 import 'package:get/get.dart';
 
 class PurchaseController extends GetxController {
-  var _product = [].obs;
+  var _reports = [].obs;
   var _total = 0.0.obs;
 
   get total => _total.value;
-  get items => _product.value;
+  get reportes => _reports.value;
 
   void onInit() {
     super.onInit();
-    _product.add(Product(0, "Toy car", 10));
-    _product.add(Product(1, "Toy house", 20));
+    _reports.add(Report("Agua",11.023077, -74.866522, 0));
+    _reports.add(Report("Luz", 11.023156, -74.867867, 1));
+    _reports.add(Report("Gas", 11.021775, -74.868608, 2));
   }
 
   void addProduct(int id) {
-    _product.firstWhere((element) => element.id == id).quantity++;
-    _product.refresh();
-    onTotalBuy();
+    
   }
 
   void deleteProduct(int id) {
-    if(_product.firstWhere((element) => element.id == id).quantity > 0){
-      _product.firstWhere((element) => element.id == id).quantity--;
-    }else{
-      _product.firstWhere((element) => element.id == id).quantity = 0;
-    }
-    _product.refresh();
-    onTotalBuy();
+    
   }
 
   int getQuantity(int id){
-     return _product.firstWhere((element) => element.id == id).quantity;
+    return 0;
   }
   void onTotalBuy(){ 
-    _total.value = _product.fold(0, (sum, element) => sum + element.quantity * element.price);
+    
   }
 }

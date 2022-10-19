@@ -1,14 +1,9 @@
 
 
 import 'package:f_shopping_app/ui/pages/home_page.dart';
-import 'package:f_shopping_app/ui/pages/product_list.dart';
 import 'package:f_shopping_app/ui/pages/sign_up.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 
-import '../Widgets/banner.dart';
-import '../Widgets/cart_total.dart';
 
 
 class Login extends StatefulWidget {
