@@ -299,11 +299,13 @@ class SignUp_Form extends State<SignUp> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: FlatButton(
-                    shape: RoundedRectangleBorder(
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
                     ),
-                    color: Color.fromARGB(255, 82, 125, 255),
+                    backgroundColor: Color.fromARGB(255, 47, 91, 223),),
+                    
                     onPressed: () {
                       Navigator.push(
                         context,

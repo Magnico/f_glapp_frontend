@@ -23,7 +23,7 @@ class NReport_Form extends State<NewReport> {
             MaterialPageRoute(builder: (context) => const Report()),
            );
         }),
-        title: Text('Nuevo Reporte'),
+        title: const Text('Nuevo Reporte'),
         
         backgroundColor: Color.fromARGB(255, 48, 105, 219),
       ),
@@ -50,7 +50,7 @@ class NReport_Form extends State<NewReport> {
 
        child: TextFormField(
         initialValue: 'nombre de la empresa, ej: aires',
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           labelText: 'Empresa',
           
           border: OutlineInputBorder(),
@@ -81,7 +81,7 @@ class NReport_Form extends State<NewReport> {
 
             child: TextFormField(
               initialValue: '00/00/00',
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Fecha actual',
               
                 border: OutlineInputBorder(),
@@ -143,10 +143,9 @@ class NReport_Form extends State<NewReport> {
            padding: const EdgeInsets.only(left: 0.0, right: 10.0),
       
      child: TextFormField(
-        cursorColor: Theme.of(context).cursorColor,
         initialValue: 'escribir',
         maxLength: 100,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           icon: Icon(Icons.note_add),
           labelText: 'REPORTE',
           labelStyle: TextStyle(

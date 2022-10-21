@@ -46,9 +46,12 @@ class HomeState extends State<HomePage> {
 
   //initializing the reports icons map
   void loadReportsIcons() async {
-      IconSet[0] = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
-      IconSet[1] = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
-      IconSet[2] = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
+    IconSet[0] =
+        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
+    IconSet[1] =
+        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
+    IconSet[2] =
+        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
     /*
       IconSet[0] = await BitmapDescriptor.fromAssetImage(
           ImageConfiguration(devicePixelRatio: 2.5), 'images/water.png');
@@ -67,7 +70,7 @@ class HomeState extends State<HomePage> {
 
     loadActualPosition();
     loadReportsIcons();
-    
+
     _searchFocusNode = FocusNode();
   }
 
@@ -78,6 +81,169 @@ class HomeState extends State<HomePage> {
     _controller.future.then((controller) => controller.dispose());
   }
 
+  
+
+  @override
+  Widget build(BuildContext context) {
+    ReportController con = Get.find<ReportController>();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 47, 91, 223),
+        //cuando retorne a la pantalla principal, dispose el controlador
+        automaticallyImplyLeading: false,
+        actions: [
+          //search field
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: TextField(
+              focusNode: _searchFocusNode,
+              controller: searchTextController,
+              decoration: const InputDecoration(
+                hintText: 'Ingrese su ubicación',
+                hintStyle: TextStyle(color: Colors.white),
+                prefixIcon: Icon(Icons.search, color: Colors.white),
+              ),
+              onChanged: (value) {
+                if (_debounce?.isActive ?? false) _debounce!.cancel();
+                _debounce = Timer(const Duration(milliseconds: 1000), () {
+                  if (value.isNotEmpty) {
+                    autocompleteSearch(value);
+                  } else {
+                    setState(() {
+                      _places = [];
+                    });
+                  }
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+        FloatingActionButton(
+          onPressed: () async {
+            if (_placeDetails != null) {
+              var type = Random().nextInt(3);
+              con.addReport(
+                  type,
+                  con.giveName(type),
+                  _placeDetails!.geometry!.location!.lat!,
+                  _placeDetails!.geometry!.location!.lng!);
+            }
+            focusMap();
+          },
+          child: const Icon(Icons.add),
+        ),
+        const Padding(padding: EdgeInsets.only(right: 40))
+      ]),
+      body: Column(
+        children: [
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: _places.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: const Icon(Icons.location_on),
+                title: Text(_places[index].description!.toString()),
+                onTap: () async {
+                  final placeId = _places[index].placeId;
+                  final details = await _googlePlace.details.get(placeId!);
+                  if (details != null && details.result != null && mounted) {
+                    if (_searchFocusNode.hasFocus) {
+                      setState(() {
+                        _placeDetails = details.result;
+                        searchTextController.text = _placeDetails!.name!;
+                        //usar placeDetails para obtener la ubicación
+                        currentLocation = LatLng(
+                            _placeDetails!.geometry!.location!.lat!,
+                            _placeDetails!.geometry!.location!.lng!);
+                        _places = [];
+                        _searchFocusNode.unfocus();
+                      });
+                      focusMap();
+                    }
+                  }
+                },
+              );
+            },
+          ),
+          Expanded(
+              child: GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition:
+                CameraPosition(target: currentLocation, zoom: 15),
+            onMapCreated: (GoogleMapController controller) {
+              if (!_controller.isCompleted) {
+                _controller.complete(controller);
+              }
+            },
+            markers: <Marker>{
+              Marker(
+                draggable: false,
+                markerId: const MarkerId("ME"),
+                position: currentLocation,
+                icon: BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueGreen),
+                infoWindow: const InfoWindow(
+                  title: 'Mi Ubicación',
+                ),
+              ),
+              //iterar sobre la lista de reportes del ReportController
+              for (var report in con.reportes)
+                Marker(
+                  draggable: false,
+                  markerId: MarkerId(report.id.toString()),
+                  position: LatLng(report.lat, report.lng),
+                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueRed),
+                  infoWindow: InfoWindow(title: report.name),
+                ),
+            },
+          ))
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color.fromARGB(255, 47, 91, 223),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white.withOpacity(.60),
+        selectedFontSize: 14,
+        unselectedFontSize: 14,
+        onTap: (value) {
+          // Respond to item press.
+          setState(() {
+            actual = value;
+          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => paginas[actual]),
+          );
+        },
+        currentIndex: actual,
+        items: const [
+          BottomNavigationBarItem(
+            label: 'Home',
+            icon: Icon(Icons.home),
+          ),
+          BottomNavigationBarItem(
+            label: 'Reportes',
+            icon: Icon(Icons.receipt),
+          ),
+          BottomNavigationBarItem(
+            label: 'Notificaciones',
+            icon: Icon(Icons.notifications),
+          ),
+          BottomNavigationBarItem(
+            label: 'Perfil',
+            icon: Icon(Icons.person),
+          ),
+        ],
+      ),
+    );
+  }
+  
   autocompleteSearch(String value) async {
     var result = await _googlePlace.autocomplete.get(value);
     if (result != null && result.predictions != null && mounted) {
@@ -132,155 +298,4 @@ class HomeState extends State<HomePage> {
         CameraPosition(target: currentLocation, zoom: 15)));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    ReportController con = Get.find<ReportController>();
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 47, 91, 223),
-        //cuando retorne a la pantalla principal, dispose el controlador
-        automaticallyImplyLeading: false,
-        actions: [
-          //search field
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: TextField(
-              focusNode: _searchFocusNode,
-              controller: searchTextController,
-              decoration: const InputDecoration(
-                hintText: 'Ingrese su ubicación',
-                hintStyle: TextStyle(color: Colors.white),
-                prefixIcon: Icon(Icons.search, color: Colors.white),
-              ),
-              onChanged: (value) {
-                if (_debounce?.isActive ?? false) _debounce!.cancel();
-                _debounce = Timer(const Duration(milliseconds: 1000), () {
-                  if (value.isNotEmpty) {
-                    autocompleteSearch(value);
-                  } else {
-                    setState(() {
-                      _places = [];
-                    });
-                  }
-                });
-              },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          if(_placeDetails!= null){
-            var type = Random().nextInt(3);
-            con.addReport(type, con.giveName(type), _placeDetails!.geometry!.location!.lat!, _placeDetails!.geometry!.location!.lng!);
-          }
-          focusMap();
-        },
-        child: const Icon(Icons.add),
-      ),
-      body: Column(
-        children: [
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: _places.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: const Icon(Icons.location_on),
-                title: Text(_places[index].description!.toString()),
-                onTap: () async {
-                  final placeId = _places[index].placeId;
-                  final details = await _googlePlace.details.get(placeId!);
-                  if (details != null && details.result != null && mounted) {
-                    if (_searchFocusNode.hasFocus) {
-                      setState(() {
-                        _placeDetails = details.result;
-                        searchTextController.text = _placeDetails!.name!;
-                        //usar placeDetails para obtener la ubicación
-                        currentLocation = LatLng(
-                            _placeDetails!.geometry!.location!.lat!,
-                            _placeDetails!.geometry!.location!.lng!);
-                        _places = [];
-                        _searchFocusNode.unfocus();
-                      });
-                      focusMap();
-                    }
-                  }
-                },
-              );
-            },
-          ),
-          Expanded(
-              child: GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition:
-                CameraPosition(target: currentLocation, zoom: 15),
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-            markers: <Marker>{
-              Marker(
-                draggable: false,
-                markerId: const MarkerId("ME"),
-                position: currentLocation,
-                icon: BitmapDescriptor.defaultMarkerWithHue(
-                    BitmapDescriptor.hueGreen),
-                infoWindow: const InfoWindow(
-                  title: 'Mi Ubicación',
-                ),
-              ),
-              //iterar sobre la lista de reportes del ReportController
-              for (var report in con.reportes)
-                Marker(
-                  draggable: false,
-                  markerId: MarkerId(report.id.toString()),
-                  position: LatLng(report.lat, report.lng),
-                  icon: BitmapDescriptor.defaultMarkerWithHue(
-                      BitmapDescriptor.hueRed),
-                  infoWindow: InfoWindow(
-                    title: report.name
-                  ),
-                ),
-            },
-          ))
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Color.fromARGB(255, 47, 91, 223),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white.withOpacity(.60),
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        onTap: (value) {
-          // Respond to item press.
-          setState(() {
-            actual = value;
-          });
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => paginas[actual]),
-          );
-        },
-        currentIndex: actual,
-        items: const [
-          BottomNavigationBarItem(
-            label: 'Home',
-            icon: Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            label: 'Reportes',
-            icon: Icon(Icons.receipt),
-          ),
-          BottomNavigationBarItem(
-            label: 'Places',
-            icon: Icon(Icons.location_on),
-          ),
-          BottomNavigationBarItem(
-            label: 'Perfil',
-            icon: Icon(Icons.person),
-          ),
-        ],
-      ),
-    );
-  }
 }
