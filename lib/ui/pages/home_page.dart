@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:f_shopping_app/ui/Widgets/navBar.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -36,13 +37,6 @@ class HomeState extends State<HomePage> {
 
   DetailsResult? _placeDetails;
   late FocusNode _searchFocusNode;
-
-  List<Widget> paginas = [
-    HomePage(),
-    Report(),
-    HomePage(),
-    ProfilePage(),
-  ];
 
   //initializing the reports icons map
   void loadReportsIcons() async {
@@ -81,8 +75,6 @@ class HomeState extends State<HomePage> {
     _controller.future.then((controller) => controller.dispose());
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     ReportController con = Get.find<ReportController>();
@@ -119,9 +111,8 @@ class HomeState extends State<HomePage> {
           ),
         ],
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
+      floatingActionButton:
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
         FloatingActionButton(
           onPressed: () async {
             if (_placeDetails != null) {
@@ -190,7 +181,6 @@ class HomeState extends State<HomePage> {
                   title: 'Mi Ubicación',
                 ),
               ),
-              //iterar sobre la lista de reportes del ReportController
               for (var report in con.reportes)
                 Marker(
                   draggable: false,
@@ -204,46 +194,10 @@ class HomeState extends State<HomePage> {
           ))
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromARGB(255, 47, 91, 223),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white.withOpacity(.60),
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        onTap: (value) {
-          // Respond to item press.
-          setState(() {
-            actual = value;
-          });
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => paginas[actual]),
-          );
-        },
-        currentIndex: actual,
-        items: const [
-          BottomNavigationBarItem(
-            label: 'Home',
-            icon: Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            label: 'Reportes',
-            icon: Icon(Icons.receipt),
-          ),
-          BottomNavigationBarItem(
-            label: 'Notificaciones',
-            icon: Icon(Icons.notifications),
-          ),
-          BottomNavigationBarItem(
-            label: 'Perfil',
-            icon: Icon(Icons.person),
-          ),
-        ],
-      ),
+      bottomNavigationBar: BNavigationBar(actual, this),
     );
   }
-  
+
   autocompleteSearch(String value) async {
     var result = await _googlePlace.autocomplete.get(value);
     if (result != null && result.predictions != null && mounted) {
@@ -297,5 +251,4 @@ class HomeState extends State<HomePage> {
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: currentLocation, zoom: 15)));
   }
-
 }

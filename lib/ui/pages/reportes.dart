@@ -1,21 +1,24 @@
+import 'package:f_shopping_app/ui/Widgets/navBar.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/nuevoReporte.dart';
+import 'package:f_shopping_app/ui/pages/usuario.dart';
 import 'package:flutter/material.dart';
 
 class Report extends StatefulWidget {
   const Report({Key? key}) : super(key: key);
-  
+
   @override
   State<Report> createState() => Report_Form();
-  
 }
 
 class Report_Form extends State<Report> {
-    @override
+
+  int actual = 1;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:AppBar(
-        leading: Icon(Icons.menu),
+      appBar: AppBar(
         title: Text('Mis Reportes'),
         actions: [
           Icon(Icons.favorite),
@@ -27,30 +30,16 @@ class Report_Form extends State<Report> {
         ],
         backgroundColor: Color.fromARGB(255, 48, 105, 219),
       ),
-      bottomNavigationBar: BottomAppBar(
-    child: Row(
-      children: [
-        IconButton(icon: Icon(Icons.home), onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
-           );
-        }),
-        Spacer(),
-        IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
-      ],
-    ),
-  ),
-  floatingActionButton:
-      FloatingActionButton(child: Icon(Icons.add), onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const NewReport()),
-           );
-      }),
-  floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
+      bottomNavigationBar: BNavigationBar(actual, this),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const NewReport()),
+            );
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
-
 }
