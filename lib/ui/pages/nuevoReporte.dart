@@ -1,9 +1,11 @@
-import 'package:f_shopping_app/ui/pages/home_page.dart';
+import 'package:f_shopping_app/ui/controller/ReportController.dart';
 import 'package:f_shopping_app/ui/pages/reportes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NewReport extends StatefulWidget {
-  const NewReport({Key? key}) : super(key: key);
+
+  NewReport({Key? key}) : super(key: key);
   
   @override
   State<NewReport> createState() => NReport_Form();
@@ -13,6 +15,7 @@ class NewReport extends StatefulWidget {
 class NReport_Form extends State<NewReport> {
     @override
   Widget build(BuildContext context) {
+    ReportController con = Get.find<ReportController>();
     return Scaffold(
       
       appBar:AppBar(
@@ -28,8 +31,22 @@ class NReport_Form extends State<NewReport> {
         backgroundColor: Color.fromARGB(255, 48, 105, 219),
       ),
 
-     body: Column(children: [
-      Image.network("https://www.google.com/url?sa=i&url=https%3A%2F%2Fpngtree.com%2Ffreepng%2Freport-vector-icon_3756940.html&psig=AOvVaw2tsfRsgpIb0CNXvOqf_t9m&ust=1666208691737000&source=images&cd=vfe&ved=0CA0QjRxqFwoTCODz-6LF6voCFQAAAAAdAAAAABAD", height: 300,width: 300,),
+     body: ListView(children: [
+      //put description icon in a circle container
+      Container(
+        width: 200,
+        height: 200,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.blue,
+        ),
+        child: const Icon(
+          Icons.description,
+          size: 150,
+          color: Colors.white,
+        ),
+      ),
+
        const Divider(
             height: 24.0,
           ),

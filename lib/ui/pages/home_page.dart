@@ -1,17 +1,15 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:f_shopping_app/ui/Widgets/navBar.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
+import 'package:f_shopping_app/ui/pages/nuevoReporte.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:f_shopping_app/ui/pages/reportes.dart';
-import 'package:f_shopping_app/ui/pages/usuario.dart';
 import 'package:google_place/google_place.dart';
 
-LatLng currentLocation = LatLng(0, 0);
+LatLng currentLocation = const LatLng(0, 0);
 final Completer<GoogleMapController> _controller = Completer();
 
 class HomePage extends StatefulWidget {
@@ -78,6 +76,7 @@ class HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     ReportController con = Get.find<ReportController>();
+    con.changeLocation(currentLocation);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 47, 91, 223),
@@ -111,24 +110,17 @@ class HomeState extends State<HomePage> {
           ),
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton:
-          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-        FloatingActionButton(
-          onPressed: () async {
-            if (_placeDetails != null) {
-              var type = Random().nextInt(3);
-              con.addReport(
-                  type,
-                  con.giveName(type),
-                  _placeDetails!.geometry!.location!.lat!,
-                  _placeDetails!.geometry!.location!.lng!);
-            }
-            focusMap();
+          FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NewReport()),
+            );
           },
           child: const Icon(Icons.add),
         ),
-        const Padding(padding: EdgeInsets.only(right: 40))
-      ]),
       body: Column(
         children: [
           ListView.builder(
@@ -150,6 +142,7 @@ class HomeState extends State<HomePage> {
                         currentLocation = LatLng(
                             _placeDetails!.geometry!.location!.lat!,
                             _placeDetails!.geometry!.location!.lng!);
+                        con.changeLocation(currentLocation);
                         _places = [];
                         _searchFocusNode.unfocus();
                       });
@@ -250,5 +243,6 @@ class HomeState extends State<HomePage> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: currentLocation, zoom: 15)));
+        
   }
 }

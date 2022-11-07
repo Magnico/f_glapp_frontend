@@ -1,6 +1,6 @@
+import 'package:f_shopping_app/ui/Widgets/button.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/sign_up.dart';
-import 'package:f_shopping_app/ui/pages/usuario.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -16,10 +16,11 @@ class Login_Form extends State<Login> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: ListView(children: [
-        Image.network(
-          "https://www.prajwaldesai.com/wp-content/uploads/2021/02/Find-Users-Last-Logon-Time-using-4-Easy-Methods.jpg",
-          height: 300,
-          width: 300,
+        //Icon profile 300x300 px
+        const Icon(
+          Icons.account_circle,
+          size: 200,
+          color: Colors.blue,
         ),
         const SizedBox(),
         Row(
@@ -124,71 +125,7 @@ class Login_Form extends State<Login> {
         const Divider(
           height: 24.0,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: TextButton(
-                child: const Text(
-                  "Forgot Password?",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 82, 117, 255),
-                    fontSize: 15.0,
-                  ),
-                  textAlign: TextAlign.end,
-                ),
-                onPressed: () => {},
-              ),
-            ),
-          ],
-        ),
-        Container(
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
-          alignment: Alignment.center,
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    backgroundColor: const Color.fromARGB(255, 82, 125, 255),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20.0,
-                      horizontal: 20.0,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const <Widget>[
-                        Expanded(
-                          child: Text(
-                            "LOGIN",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        BTNavigation(MediaQuery.of(context).size.width, const HomePage(),"Login", this),
         Container(
           width: MediaQuery.of(context).size.width,
           margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
@@ -217,51 +154,7 @@ class Login_Form extends State<Login> {
             ],
           ),
         ),
-        Container(
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
-          alignment: Alignment.center,
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    backgroundColor: const Color.fromARGB(255, 82, 125, 255),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const SignUp()),
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20.0,
-                      horizontal: 20.0,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const <Widget>[
-                        Expanded(
-                          child: Text(
-                            "SIGN UP",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        BTNavigation(MediaQuery.of(context).size.width, const SignUp(),"Sign Up", this),
       ]),
     );
   }

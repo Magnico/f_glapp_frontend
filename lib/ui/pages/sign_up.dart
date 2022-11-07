@@ -1,3 +1,4 @@
+import 'package:f_shopping_app/ui/Widgets/button.dart';
 import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,11 @@ class SignUp_Form extends State<SignUp> {
     return Scaffold(resizeToAvoidBottomInset:false,
       body:  ListView(
       children: [
-        Image.network("https://media.istockphoto.com/vectors/sign-up-icon-isolated-on-white-background-vector-illustration-vector-id1193039142?k=20&m=1193039142&s=612x612&w=0&h=e53ulqLdsZowR7K4kuoI8OoVwi8IbPff1CKHKNPmGBw=", height: 300,width: 300,),
+        Icon(
+          Icons.account_circle,
+          size: 200,
+          color: Colors.blue,
+        ),
         const SizedBox(
           
           
@@ -292,54 +297,8 @@ class SignUp_Form extends State<SignUp> {
             height: 24.0,
           ),
           
-          Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
-            alignment: Alignment.center,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    backgroundColor: Color.fromARGB(255, 47, 91, 223),),
-                    
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Login()),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 20.0,
-                        horizontal: 20.0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const <Widget>[
-                          Expanded(
-                            child: Text(
-                              "SAVE",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          BTNavigation(MediaQuery.of(context).size.width, const Login(), "SAVE", this),
           
-
-
       ]
 
     ),

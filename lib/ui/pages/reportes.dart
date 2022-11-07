@@ -1,7 +1,5 @@
 import 'package:f_shopping_app/ui/Widgets/navBar.dart';
-import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/nuevoReporte.dart';
-import 'package:f_shopping_app/ui/pages/usuario.dart';
 import 'package:flutter/material.dart';
 
 class Report extends StatefulWidget {
@@ -36,7 +34,7 @@ class Report_Form extends State<Report> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const NewReport()),
+              MaterialPageRoute(builder: (context) => NewReport()),
             );
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
