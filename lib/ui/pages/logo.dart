@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +9,7 @@ class logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Timer _continue = Timer(const Duration(milliseconds: 1000), () {Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));});
     return Scaffold(
       body: Center(
         child: Column(
@@ -20,10 +24,7 @@ class logo extends StatelessWidget {
               height: 20,
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Login(),));
-              },
-              child: const Text('Bienvenido a GlApp continuar ->',
+              child: const Text('Bienvenido a GlApp',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
