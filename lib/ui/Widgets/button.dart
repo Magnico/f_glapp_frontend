@@ -30,7 +30,7 @@ class BTNavigation extends StatelessWidget {
                 backgroundColor: const Color.fromARGB(255, 82, 125, 255),
               ),
               onPressed: () {
-                callback != Null
+                callback != null
                     ? callback!()
                     : Navigator.push(
                         context,
