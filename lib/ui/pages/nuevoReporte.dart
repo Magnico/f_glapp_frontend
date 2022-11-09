@@ -19,16 +19,14 @@ class NReport_Form extends State<NewReport> {
     return Scaffold(
       
       appBar:AppBar(
-        
-        leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () {
+        title: const Text("Nuevo reporte"),
+        leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const Report()),
            );
         }),
-        title: const Text('Nuevo Reporte'),
-        
-        backgroundColor: Color.fromARGB(255, 48, 105, 219),
+        backgroundColor: const Color.fromARGB(255, 47, 91, 223),
       ),
 
      body: ListView(children: [
@@ -64,7 +62,7 @@ class NReport_Form extends State<NewReport> {
               ),
             ),
            padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-
+           //Debería ser un selector de la empresa
        child: TextFormField(
         initialValue: 'nombre de la empresa, ej: aires',
         decoration: const InputDecoration(
@@ -127,7 +125,9 @@ class NReport_Form extends State<NewReport> {
               ),
             ),
            padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-
+           //Aqui se debe cambiar por la opcion de elegir la ubicación
+           //Entre la ubicaion actual dada por las coordenadas
+           //o indicar la ubicación a travez de la direccion como en la pagina principal
             child: TextFormField(
               initialValue: 'Ej: Cra 51b calle 96',
               decoration: InputDecoration(
@@ -158,7 +158,10 @@ class NReport_Form extends State<NewReport> {
               ),
             ),
            padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-      
+      //Se deben ampliar las opciones para describir el reporte
+      //Por un lado se debe poder escoger el tipo de problema de una lista
+      //Se debe de poder dar una descripción por parte del usuario
+      //Se debe de poder adjuntar imagenes de estos problemas como prueba
      child: TextFormField(
         initialValue: 'escribir',
         maxLength: 100,

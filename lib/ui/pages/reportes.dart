@@ -1,4 +1,5 @@
 import 'package:f_shopping_app/ui/Widgets/navBar.dart';
+import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/nuevoReporte.dart';
 import 'package:flutter/material.dart';
 
@@ -17,20 +18,18 @@ class Report_Form extends State<Report> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mis Reportes'),
-        actions: [
-          Icon(Icons.favorite),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Icon(Icons.search),
-          ),
-          Icon(Icons.more_vert),
-        ],
-        backgroundColor: Color.fromARGB(255, 48, 105, 219),
+        title: const Text("Mis reportes"),
+        leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+           );
+        }),
+        backgroundColor: const Color.fromARGB(255, 47, 91, 223),
       ),
       bottomNavigationBar: BNavigationBar(actual, this),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
           onPressed: () {
             Navigator.push(
               context,
