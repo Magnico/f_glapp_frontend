@@ -1,3 +1,4 @@
+import 'package:f_shopping_app/ui/Widgets/datetime.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
 import 'package:f_shopping_app/ui/pages/reportes.dart';
 import 'package:flutter/material.dart';
@@ -95,16 +96,7 @@ class NReport_Form extends State<NewReport> {
                 ),
               ),
               padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-              child: TextFormField(
-                initialValue: '00/00/00',
-                decoration: const InputDecoration(
-                  labelText: 'Fecha actual',
-                  border: OutlineInputBorder(),
-                  suffixIcon: Icon(
-                    Icons.date_range,
-                  ),
-                ),
-              ),
+              child: BasicDateTimeField("Fecha de reporte"),
             ),
             const Divider(
               height: 24.0,
@@ -122,9 +114,11 @@ class NReport_Form extends State<NewReport> {
                 ),
               ),
               padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+              // Esto lo hago yo (Enrique)
               //Aqui se debe cambiar por la opcion de elegir la ubicación
               //Entre la ubicaion actual dada por las coordenadas
               //o indicar la ubicación a travez de la direccion como en la pagina principal
+              //tipo de daño
               child: TextFormField(
                 initialValue: 'Ej: Cra 51b calle 96',
                 decoration: InputDecoration(
@@ -156,6 +150,9 @@ class NReport_Form extends State<NewReport> {
               //Por un lado se debe poder escoger el tipo de problema de una lista
               //Se debe de poder dar una descripción por parte del usuario
               //Se debe de poder adjuntar imagenes de estos problemas como prueba
+              //titulo
+              //descripción
+              //imagen
               child: TextFormField(
                 initialValue: 'escribir',
                 maxLength: 100,
