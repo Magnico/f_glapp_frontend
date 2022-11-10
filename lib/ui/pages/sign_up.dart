@@ -1,309 +1,279 @@
+import 'dart:convert';
+
 import 'package:f_shopping_app/ui/Widgets/button.dart';
+import 'package:f_shopping_app/ui/Widgets/passwordField.dart';
 import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-
+import '../../config/config.dart';
+import 'home_page.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
-  
+
   @override
   State<SignUp> createState() => SignUp_Form();
-  
 }
 
 class SignUp_Form extends State<SignUp> {
-  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(resizeToAvoidBottomInset:false,
-      body:  ListView(
-      children: [
-        Icon(
+    final nameController = TextEditingController();
+    final idController = TextEditingController();
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+
+    handleSignup() async {
+      // url base de la api
+      // final API_URL = "https://glapp-api.herokuapp.com";
+
+      // url de la api para el login
+      final url = Uri.parse(Config.API_URL + "/auth/signup");
+
+      // datos del formulario
+      final data = {
+        "email": emailController.text,
+        "password": passwordController.text,
+        "name": nameController.text,
+        "identification_number": idController.text,
+        "role": 1
+      };
+
+      // respuesta de la api
+      final response = await post(url, body: jsonEncode(data));
+
+      print(response.body);
+      // si la respuesta es 200 (ok)
+      if (response.statusCode == 200) {
+        final sharedPref = await SharedPreferences.getInstance();
+        sharedPref.setString("jwt", response.body);
+
+        // redireccionar a la pagina de inicio
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+      } else {
+        // mostrar un mensaje de error
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error, con el servidor'),
+          ),
+        );
+      }
+    }
+
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: ListView(children: [
+        const Icon(
           Icons.account_circle,
           size: 200,
           color: Colors.blue,
         ),
-        const SizedBox(
-          
-          
+        const SizedBox(),
+        Row(
+          children: const <Widget>[
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 40.0),
+                child: Text(
+                  "NAME",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 82, 122, 255),
+                    fontSize: 15.0,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        
-
-          Row(
-            children: const <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                  color: Color.fromARGB(255, 82, 122, 255),
+                  width: 0.5,
+                  style: BorderStyle.solid),
+            ),
+          ),
+          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
               Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 40.0),
-                  child: Text(
-                    "NAME",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 82, 122, 255),
-                      fontSize: 15.0,
-                    ),
+                child: TextField(
+                  controller: nameController,
+                  textAlign: TextAlign.left,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'ingresa tu nombre completo',
+                    hintStyle: TextStyle(color: Colors.grey),
                   ),
                 ),
               ),
             ],
           ),
-        Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
+        ),
+        const Divider(
+          height: 24.0,
+        ),
+        Row(
+          children: const <Widget>[
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 40.0),
+                child: Text(
+                  "IDENTIFICACIÓN",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 82, 122, 255),
-                    width: 0.5,
-                    style: BorderStyle.solid),
-              ),
-            ),
-           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const <Widget>[
-                Expanded(
-                  child: TextField(
-                    
-                    textAlign: TextAlign.left,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'ingresa tu nombre completo',
-                      hintStyle: TextStyle(color: Colors.grey),
-                    ),
+                    fontSize: 15.0,
                   ),
                 ),
-              ],
+              ),
+            ),
+          ],
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                  color: Color.fromARGB(255, 82, 122, 255),
+                  width: 0.5,
+                  style: BorderStyle.solid),
             ),
           ),
-
-          const Divider(
-            height: 24.0,
-          ),
-          Row(
-            children: const <Widget>[
+          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
               Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 40.0),
-                  child: Text(
-                    "IDENTIFICACIÓN",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 82, 122, 255),
-                      fontSize: 15.0,
-                    ),
+                child: TextField(
+                  controller: idController,
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.left,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'ingresa el numero de identificación ',
+                    hintStyle: TextStyle(color: Colors.grey),
                   ),
                 ),
               ),
             ],
           ),
-        Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
+        ),
+        const Divider(
+          height: 24.0,
+        ),
+        Row(
+          children: const <Widget>[
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 40.0),
+                child: Text(
+                  "EMAIL",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 82, 122, 255),
-                    width: 0.5,
-                    style: BorderStyle.solid),
-              ),
-            ),
-           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const <Widget>[
-                Expanded(
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    
-                    textAlign: TextAlign.left,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'ingresa el numero de identificación ',
-                      hintStyle: TextStyle(color: Colors.grey),
-                    ),
+                    fontSize: 15.0,
                   ),
                 ),
-              ],
+              ),
+            ),
+          ],
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                  color: Color.fromARGB(255, 82, 122, 255),
+                  width: 0.5,
+                  style: BorderStyle.solid),
             ),
           ),
-
-          const Divider(
-            height: 24.0,
-          ),
-
-          Row(
-            children: const <Widget>[
+          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
               Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 40.0),
-                  child: Text(
-                    "EMAIL",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 82, 122, 255),
-                      fontSize: 15.0,
-                    ),
+                child: TextField(
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  textAlign: TextAlign.left,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'ingresa tu correo electronico',
+                    hintStyle: TextStyle(color: Colors.grey),
                   ),
                 ),
               ),
             ],
           ),
-        Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
+        ),
+        const Divider(
+          height: 24.0,
+        ),
+        Row(
+          children: const <Widget>[
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 40.0),
+                child: Text(
+                  "CONTRASEÑA",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 82, 122, 255),
-                    width: 0.5,
-                    style: BorderStyle.solid),
-              ),
-            ),
-           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const <Widget>[
-                Expanded(
-                  child: TextField(
-                    keyboardType: TextInputType.emailAddress,
-                    textAlign: TextAlign.left,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'ingresa tu correo electronico',
-                      hintStyle: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const Divider(
-            height: 24.0,
-          ),
-
-          Row(
-            children: const <Widget>[
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 40.0),
-                  child: Text(
-                    "CONTRASEÑA",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 82, 122, 255),
-                      fontSize: 15.0,
-                    ),
+                    fontSize: 15.0,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
         Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                    color: Color.fromARGB(255, 82, 122, 255),
-                    width: 0.5,
-                    style: BorderStyle.solid),
-              ),
-            ),
-           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const <Widget>[
-                Expanded(
-                  child: TextField(
-                    keyboardType: TextInputType.visiblePassword,
-                    
-                    textAlign: TextAlign.left,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'crea una nueva contraseña',
-                      hintStyle: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                ),
-              ],
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                  color: Color.fromARGB(255, 82, 122, 255),
+                  width: 0.5,
+                  style: BorderStyle.solid),
             ),
           ),
-
-          const Divider(
-            height: 24.0,
+          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [PasswordField(passwordController)],
           ),
-
-          Row(
-            children: const <Widget>[
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 40.0),
-                  child: Text(
-                    "ROLE",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 82, 122, 255),
-                      fontSize: 15.0,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                    color: Color.fromARGB(255, 82, 122, 255),
-                    width: 0.5,
-                    style: BorderStyle.solid),
-              ),
-            ),
-           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const <Widget>[
-                Expanded(
-                  child: TextField(
-                    keyboardType: TextInputType.visiblePassword,
-                    
-                    textAlign: TextAlign.left,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'ingrese rol "Usuario" o "Empresa"',
-                      hintStyle: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const Divider(
-            height: 24.0,
-          ),
-          
-          BTNavigation(MediaQuery.of(context).size.width, const Login(), "SAVE", this),
-          
-      ]
-
-    ),
-    
+        ),
+        const Divider(
+          height: 24.0,
+        ),
+        BTNavigation(MediaQuery.of(context).size.width, const Login(), "SAVE",
+            this, handleSignup),
+        const Divider(
+          height: 24.0,
+        ),
+      ]),
     );
-
   }
 }
