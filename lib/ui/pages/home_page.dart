@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 
 import 'package:f_shopping_app/ui/Widgets/navBar.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
@@ -9,6 +11,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../config/config.dart';
+import '../../domain/report.dart';
 
 LatLng currentLocation = const LatLng(0, 0);
 final Completer<GoogleMapController> _controller = Completer();
@@ -32,9 +39,6 @@ class HomeState extends State<HomePage> {
   late GooglePlace _googlePlace;
   List<AutocompletePrediction> _places = [];
   final searchTextController = TextEditingController();
-  Timer? _debounce;
-
-  DetailsResult? _placeDetails;
   late FocusNode _searchFocusNode;
 
   //initializing the reports icons map
@@ -78,82 +82,20 @@ class HomeState extends State<HomePage> {
   Widget build(BuildContext context) {
     ReportController con = Get.find<ReportController>();
     con.changeLocation(currentLocation);
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 47, 91, 223),
-        //cuando retorne a la pantalla principal, dispose el controlador
-        automaticallyImplyLeading: false,
-        actions: [
-          //search field
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: TextField(
-              focusNode: _searchFocusNode,
-              controller: searchTextController,
-              decoration: const InputDecoration(
-                hintText: 'Ingrese su ubicación',
-                hintStyle: TextStyle(color: Colors.white),
-                prefixIcon: Icon(Icons.search, color: Colors.white),
-              ),
-              onChanged: (value) {
-                if (_debounce?.isActive ?? false) _debounce!.cancel();
-                _debounce = Timer(const Duration(milliseconds: 1000), () {
-                  if (value.isNotEmpty) {
-                    autocompleteSearch(value);
-                  } else {
-                    setState(() {
-                      _places = [];
-                    });
-                  }
-                });
-              },
-            ),
-          ),
-        ],
-      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
-            // Todo uncomment when login is finished MaterialPageRoute(builder: (context) => NewReport()),
-            MaterialPageRoute(builder: (context) => const Login()),
+            MaterialPageRoute(builder: (context) => NewReport()),
           );
         },
         child: const Icon(Icons.add),
       ),
       body: Column(
         children: [
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: _places.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: const Icon(Icons.location_on),
-                title: Text(_places[index].description!.toString()),
-                onTap: () async {
-                  final placeId = _places[index].placeId;
-                  final details = await _googlePlace.details.get(placeId!);
-                  if (details != null && details.result != null && mounted) {
-                    if (_searchFocusNode.hasFocus) {
-                      setState(() {
-                        _placeDetails = details.result;
-                        searchTextController.text = _placeDetails!.name!;
-                        //usar placeDetails para obtener la ubicación
-                        currentLocation = LatLng(
-                            _placeDetails!.geometry!.location!.lat!,
-                            _placeDetails!.geometry!.location!.lng!);
-                        con.changeLocation(currentLocation);
-                        _places = [];
-                        _searchFocusNode.unfocus();
-                      });
-                      focusMap();
-                    }
-                  }
-                },
-              );
-            },
-          ),
           Expanded(
               child: GoogleMap(
             mapType: MapType.normal,
@@ -175,6 +117,7 @@ class HomeState extends State<HomePage> {
                   title: 'Mi Ubicación',
                 ),
               ),
+              // todo actualizar la lista de reportes de manera dinamica con obx
               for (var report in con.reportes)
                 Marker(
                   draggable: false,

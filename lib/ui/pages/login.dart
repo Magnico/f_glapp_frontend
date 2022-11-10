@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:f_shopping_app/domain/auth.dart';
 import 'package:f_shopping_app/ui/Widgets/button.dart';
 import 'package:f_shopping_app/ui/Widgets/passwordField.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
@@ -40,7 +42,12 @@ class Login_Form extends State<Login> {
       // si la respuesta es 200 (ok)
       if (response.statusCode == 200) {
         final sharedPref = await SharedPreferences.getInstance();
-        sharedPref.setString("jwt", response.body);
+
+        final json = jsonDecode(response.body);
+
+        final auth = Auth.fromJson(json);
+
+        sharedPref.setString("jwt", auth.jwt);
 
         // redireccionar a la pagina de inicio
         Navigator.push(
