@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:f_shopping_app/ui/Widgets/navBar.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
+import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:f_shopping_app/ui/pages/nuevoReporte.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -111,16 +112,16 @@ class HomeState extends State<HomePage> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton:
-          FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => NewReport()),
-            );
-          },
-          child: const Icon(Icons.add),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            // Todo uncomment when login is finished MaterialPageRoute(builder: (context) => NewReport()),
+            MaterialPageRoute(builder: (context) => const Login()),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
       body: Column(
         children: [
           ListView.builder(
@@ -243,6 +244,5 @@ class HomeState extends State<HomePage> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: currentLocation, zoom: 15)));
-        
   }
 }
