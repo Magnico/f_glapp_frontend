@@ -49,14 +49,6 @@ class HomeState extends State<HomePage> {
         BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
     IconSet[2] =
         BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
-    /*
-      IconSet[0] = await BitmapDescriptor.fromAssetImage(
-          ImageConfiguration(devicePixelRatio: 2.5), 'images/water.png');
-      IconSet[1] = await BitmapDescriptor.fromAssetImage(
-          ImageConfiguration(devicePixelRatio: 2.5), 'images/light.png');
-      IconSet[2] = await BitmapDescriptor.fromAssetImage(
-          ImageConfiguration(devicePixelRatio: 2.5), 'images/gas.png');
-    */
   }
 
   @override
@@ -122,10 +114,13 @@ class HomeState extends State<HomePage> {
                 Marker(
                   draggable: false,
                   markerId: MarkerId(report.id.toString()),
-                  position: LatLng(report.lat, report.lng),
-                  icon: BitmapDescriptor.defaultMarkerWithHue(
-                      BitmapDescriptor.hueRed),
-                  infoWindow: InfoWindow(title: report.name),
+                  position: report.location,
+                  icon: IconSet[report.bitmap],
+                  infoWindow: InfoWindow(
+                    title: report.title, 
+                    snippet: report.state.toString().split('.').last,
+                    onTap: () => log(report.location.toString()),
+                  ),
                 ),
             },
           ))
