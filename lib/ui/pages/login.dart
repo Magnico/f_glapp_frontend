@@ -6,6 +6,7 @@ import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config/config.dart';
 
@@ -38,7 +39,8 @@ class Login_Form extends State<Login> {
 
       // si la respuesta es 200 (ok)
       if (response.statusCode == 200) {
-        // ToDO guardar jwt en shared preferences
+        final sharedPref = await SharedPreferences.getInstance();
+        sharedPref.setString("jwt", response.body);
 
         // redireccionar a la pagina de inicio
         Navigator.push(

@@ -5,7 +5,9 @@ import 'package:f_shopping_app/ui/Widgets/passwordField.dart';
 import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../config/config.dart';
 import 'home_page.dart';
 
 class SignUp extends StatefulWidget {
@@ -26,10 +28,9 @@ class SignUp_Form extends State<SignUp> {
     handleSignup() async {
       // url base de la api
       // final API_URL = "https://glapp-api.herokuapp.com";
-      final API_URL = "http://localhost:3000";
 
       // url de la api para el login
-      final url = Uri.parse(API_URL + "/auth/signup");
+      final url = Uri.parse(Config.API_URL + "/auth/signup");
 
       // datos del formulario
       final data = {
@@ -46,7 +47,8 @@ class SignUp_Form extends State<SignUp> {
       print(response.body);
       // si la respuesta es 200 (ok)
       if (response.statusCode == 200) {
-        // ToDO guardar jwt en shared preferences
+        final sharedPref = await SharedPreferences.getInstance();
+        sharedPref.setString("jwt", response.body);
 
         // redireccionar a la pagina de inicio
         Navigator.push(
