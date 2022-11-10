@@ -88,7 +88,9 @@ class HomeState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          Expanded(
+          //aqui se abre el obx
+          Obx(() {
+            return Expanded(
               child: GoogleMap(
             mapType: MapType.normal,
             initialCameraPosition:
@@ -110,6 +112,8 @@ class HomeState extends State<HomePage> {
                 ),
               ),
               // todo actualizar la lista de reportes de manera dinamica con obx
+              
+            
               for (var report in con.reportes)
                 Marker(
                   draggable: false,
@@ -123,7 +127,10 @@ class HomeState extends State<HomePage> {
                   ),
                 ),
             },
-          ))
+          ));
+          }),
+          
+          //aqui se cierra el obx
         ],
       ),
       bottomNavigationBar: BNavigationBar(actual, this),

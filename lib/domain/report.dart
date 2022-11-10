@@ -13,7 +13,7 @@ class Report {
   ReportState? state;
   List history = [];
   
-  Report(this.id, this.lat, this.lng, this.bitmap, this.name){
+  Report(this.id, this.location, this.bitmap, this.title, this.desc, this.date){
     history.add({"state":ReportState.Publicado,"eventDate":date,"comment":"Reporte creado"});
     state = ReportState.Publicado;
     log("Reporte creado");
@@ -21,14 +21,18 @@ class Report {
   }
 
   factory Report.fromJson(Map<String, dynamic> json) {
-    return Report(
+    log(json.toString());
+    return Report('1', LatLng(0,0), 0, 'title', 'desc', DateTime.now());
+    /*return Report(
       json['_id'],
-      json['lat'],
-      json['lng'],
+      LatLng(json['lat'],json['lng']),
       //ToDo - change this to bitmap
       0,
       json['description'],
-    );
+      json['description'],
+      DateTime.parse(json['date']),
+    );*/
+  }
     
   void changeStatus(ReportState state, String comment){
     var package = {"state": state,"eventDate": DateTime.now(), "comment": comment};
