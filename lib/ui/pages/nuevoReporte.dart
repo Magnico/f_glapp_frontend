@@ -1,8 +1,14 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:f_shopping_app/ui/Widgets/datetime.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
+import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/reportes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_place/google_place.dart';
 import 'package:select_form_field/select_form_field.dart';
 
 class NewReport extends StatefulWidget {
@@ -13,18 +19,57 @@ class NewReport extends StatefulWidget {
 }
 
 class NReport_Form extends State<NewReport> {
+  final Color iconColor = Colors.black;
   final List<Map<String, dynamic>> _empresas = [
     {
-      'value': 'gas',
+      'value': '0',
       'label': 'Gases del Caribe',
-      'icon': const Icon(Icons.gas_meter)
+      'icon': const Icon(Icons.gas_meter_rounded)
     },
-    {'value': 'luz', 'label': 'Air-E', 'icon': const Icon(Icons.lightbulb)},
-    {'value': 'agua', 'label': 'Triple A', 'icon': const Icon(Icons.water_drop)}
+    {'value': '1', 'label': 'Air-E', 'icon': const Icon(Icons.lightbulb)},
+    {'value': '2', 'label': 'Triple A', 'icon': const Icon(Icons.water_drop)}
   ];
+
+  //REQUISITOS PARA EL AUTOCOMPLETADO DE LA LOCACIÓN
+  late GooglePlace _googlePlace;
+  List<AutocompletePrediction> _places = [];
+  final searchTextController = TextEditingController();
+  Timer? _debounce;
+  DetailsResult? _placeDetails;
+  late FocusNode _searchFocusNode;
+
+  //DATOS DEL REPORTE
+  String _locationSelected = "actual";
+  LatLng desireLocation = const LatLng(0, 0);
+  String _empresaSelected = '0';
+  String? title;
+  TextEditingController desc = TextEditingController();
+  DateTime date = DateTime.now();
+
+  void updateDate(DateTime fecha) {
+    log(fecha.toString());
+    date = fecha;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    String apiKey = 'AIzaSyB9NLDNfBdWb-PPUa9e-q6FzTP8xrranAI';
+    _googlePlace = GooglePlace(apiKey);
+
+    _searchFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _searchFocusNode.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     ReportController con = Get.find<ReportController>();
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("Nuevo reporte"),
@@ -43,12 +88,13 @@ class NReport_Form extends State<NewReport> {
             Container(
               width: 200,
               height: 200,
-              decoration: BoxDecoration(
+              margin: const EdgeInsets.only(top: 20),
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.blue,
               ),
               child: const Icon(
-                Icons.description,
+                Icons.document_scanner_rounded,
                 size: 150,
                 color: Colors.white,
               ),
@@ -60,24 +106,59 @@ class NReport_Form extends State<NewReport> {
               width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                      color: Color.fromARGB(255, 82, 122, 255),
-                      width: 0.5,
-                      style: BorderStyle.solid),
+              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+              child: TextFormField(
+                onChanged: (value) => title = value,
+                initialValue: '',
+                maxLength: 100,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.title_rounded, color: iconColor),
+                  labelText: 'Titulo del Reporte',
                 ),
               ),
+            ),
+            const Divider(
+              height: 24.0,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+              child: TextField(
+                controller: desc,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.description_rounded,
+                    color: iconColor,
+                  ),
+                  labelText: 'Descripción',
+                ),
+              ),
+            ),
+            const Divider(
+              height: 24.0,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+              alignment: Alignment.center,
               padding: const EdgeInsets.only(left: 0.0, right: 10.0),
               //Debería ser un selector de la empresa
               child: SelectFormField(
                 type: SelectFormFieldType.dropdown,
-                initialValue: 'gas',
-                icon: const Icon(Icons.question_mark),
+                initialValue: '0',
+                icon: Icon(
+                  Icons.location_city_rounded,
+                  color: iconColor,
+                ),
                 labelText: 'Empresa',
                 items: _empresas,
-                onChanged: (value) => print(value),
-                onSaved: (value) => print(value),
+                onChanged: (value) {
+                  _empresaSelected = value;
+                },
               ),
             ),
             const Divider(
@@ -87,16 +168,8 @@ class NReport_Form extends State<NewReport> {
               width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                      color: Color.fromARGB(255, 82, 122, 255),
-                      width: 0.5,
-                      style: BorderStyle.solid),
-                ),
-              ),
               padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-              child: BasicDateTimeField("Fecha de reporte"),
+              child: BasicDateTimeField("Fecha de reporte", this),
             ),
             const Divider(
               height: 24.0,
@@ -105,75 +178,146 @@ class NReport_Form extends State<NewReport> {
               width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                      color: Color.fromARGB(255, 82, 122, 255),
-                      width: 0.5,
-                      style: BorderStyle.solid),
-                ),
-              ),
               padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-              // Esto lo hago yo (Enrique)
-              //Aqui se debe cambiar por la opcion de elegir la ubicación
-              //Entre la ubicaion actual dada por las coordenadas
-              //o indicar la ubicación a travez de la direccion como en la pagina principal
-              //tipo de daño
-              child: TextFormField(
-                initialValue: 'Ej: Cra 51b calle 96',
-                decoration: InputDecoration(
-                  labelText: 'Dirección',
-                  border: OutlineInputBorder(),
-                  suffixIcon: Icon(
-                    Icons.edit_location_rounded,
+              child: Column(children: [
+                Row(children: [
+                  Icon(
+                    Icons.my_location_rounded,
+                    color: iconColor,
                   ),
+                  const Text("Ubicación")
+                ]),
+                RadioListTile(
+                    value: "actual",
+                    groupValue: _locationSelected,
+                    onChanged: (value) {
+                      setState(() {
+                        _locationSelected = "actual";
+                      });
+                    },
+                    title: const Text("Ubicación actual")),
+                RadioListTile(
+                    value: "direccion",
+                    groupValue: _locationSelected,
+                    onChanged: (value) {
+                      setState(() {
+                        _locationSelected = "direccion";
+                      });
+                    },
+                    title: const Text("Especificar dirección")),
+              ]),
+            ),
+            Visibility(
+              visible: _locationSelected == "direccion",
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: TextField(
+                  focusNode: _searchFocusNode,
+                  controller: searchTextController,
+                  decoration: const InputDecoration(
+                    hintText: 'Ingrese su ubicación',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    prefixIcon: Icon(Icons.search, color: Colors.black),
+                  ),
+                  onChanged: (value) {
+                    if (_debounce?.isActive ?? false) _debounce!.cancel();
+                    _debounce = Timer(const Duration(milliseconds: 1000), () {
+                      if (value.isNotEmpty) {
+                        autocompleteSearch(value);
+                      } else {
+                        setState(() {
+                          _places = [];
+                        });
+                      }
+                    });
+                  },
                 ),
               ),
+            ),
+            Column(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _places.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: const Icon(Icons.location_on),
+                      title: Text(_places[index].description!.toString()),
+                      onTap: () async {
+                        final placeId = _places[index].placeId;
+                        final details =
+                            await _googlePlace.details.get(placeId!);
+                        if (details != null &&
+                            details.result != null &&
+                            mounted) {
+                          if (_searchFocusNode.hasFocus) {
+                            setState(() {
+                              _placeDetails = details.result;
+                              searchTextController.text = _placeDetails!.name!;
+                              //usar placeDetails para obtener la ubicación
+                              desireLocation = LatLng(
+                                  _placeDetails!.geometry!.location!.lat!,
+                                  _placeDetails!.geometry!.location!.lng!);
+                              _places = [];
+                              _searchFocusNode.unfocus();
+                            });
+                          }
+                        }
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
             const Divider(
               height: 24.0,
             ),
             Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                      color: Color.fromARGB(255, 82, 122, 255),
-                      width: 0.5,
-                      style: BorderStyle.solid),
+              padding: const EdgeInsets.only(right: 10.0),
+              margin: const EdgeInsets.only(
+                  left: 40.0, right: 40.0, top: 10.0, bottom: 50),
+              child: ElevatedButton(
+                child: const Text("Save",
+                    style: TextStyle(
+                      color: Colors.white,
+                    )),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
                 ),
-              ),
-              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-              //Se deben ampliar las opciones para describir el reporte
-              //Por un lado se debe poder escoger el tipo de problema de una lista
-              //Se debe de poder dar una descripción por parte del usuario
-              //Se debe de poder adjuntar imagenes de estos problemas como prueba
-              //titulo
-              //descripción
-              //imagen
-              child: TextFormField(
-                initialValue: 'escribir',
-                maxLength: 100,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.note_add),
-                  labelText: 'REPORTE',
-                  labelStyle: TextStyle(
-                    color: Color(0xFF6200EE),
-                  ),
-                  helperText: 'Escribe tu reporte',
-                  suffixIcon: Icon(
-                    Icons.check_circle,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color.fromARGB(255, 0, 107, 238)),
-                  ),
-                ),
+                onPressed: () {
+                  if (title != null && title!.isNotEmpty && desc.text.isNotEmpty) {
+                    if (_locationSelected == "actual") {
+                      desireLocation = con.currentLocation;
+                    }
+                    con.addReport(int.parse(_empresaSelected), title!,
+                        desireLocation, desc.text, date);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Complete todos los campos'),
+                      ),
+                    );
+                  }
+                },
               ),
             ),
           ],
         ));
+  }
+
+  autocompleteSearch(String value) async {
+    var result = await _googlePlace.autocomplete.get(value);
+    //imprimir en el debug el primer elemento de result
+    if (result != null && result.predictions != null && mounted) {
+      setState(() {
+        _places = result.predictions!;
+      });
+    }
   }
 }

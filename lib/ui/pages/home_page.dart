@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:f_shopping_app/ui/Widgets/navBar.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
@@ -178,10 +179,13 @@ class HomeState extends State<HomePage> {
                 Marker(
                   draggable: false,
                   markerId: MarkerId(report.id.toString()),
-                  position: LatLng(report.lat, report.lng),
-                  icon: BitmapDescriptor.defaultMarkerWithHue(
-                      BitmapDescriptor.hueRed),
-                  infoWindow: InfoWindow(title: report.name),
+                  position: report.location,
+                  icon: IconSet[report.bitmap],
+                  infoWindow: InfoWindow(
+                    title: report.title, 
+                    snippet: report.state.toString().split('.').last,
+                    onTap: () => log(report.location.toString()),
+                  ),
                 ),
             },
           ))

@@ -1,7 +1,9 @@
 import 'package:f_shopping_app/ui/Widgets/navBar.dart';
+import 'package:f_shopping_app/ui/controller/ReportController.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/nuevoReporte.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Report extends StatefulWidget {
   const Report({Key? key}) : super(key: key);
@@ -13,9 +15,15 @@ class Report extends StatefulWidget {
 class Report_Form extends State<Report> {
 
   int actual = 1;
-
+  List<Icon> serviceIcons = [
+    const Icon(Icons.gas_meter_rounded, color: Colors.black),
+    const Icon(Icons.water_drop, color: Colors.black),
+    const Icon(Icons.lightbulb, color: Colors.black)
+  ];
   @override
   Widget build(BuildContext context) {
+    ReportController con = Get.find<ReportController>();
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text("Mis reportes"),
@@ -26,6 +34,39 @@ class Report_Form extends State<Report> {
            );
         }),
         backgroundColor: const Color.fromARGB(255, 47, 91, 223),
+      ),
+      body: ListView(
+        children: [
+          for (var report in con.reportes)
+            Expanded(child: 
+              Card(
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: serviceIcons[report.bitmap],
+                      title: Text(report.title),
+                      subtitle: Text(report.state.toString().split('.').last),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          child: const Text('Ver'),
+                          onPressed: () {},
+                        ),
+                        const SizedBox(width: 8),
+                        TextButton(
+                          child: const Text('Eliminar'),
+                          onPressed: () {},
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            )
+        ],
       ),
       bottomNavigationBar: BNavigationBar(actual, this),
       floatingActionButton: FloatingActionButton(
