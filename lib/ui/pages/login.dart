@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:f_shopping_app/ui/Widgets/button.dart';
 import 'package:f_shopping_app/ui/Widgets/passwordField.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+
+import '../../config/config.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -19,10 +23,8 @@ class Login_Form extends State<Login> {
   handleLogin() async {
     // url base de la api
     // final API_URL = "https://glapp-api.herokuapp.com";
-    final API_URL = "http://localhost:3000";
-
     // url de la api para el login
-    final url = Uri.parse(API_URL + "/auth/signin");
+    final url = Uri.parse(Config.API_URL + "/auth/signin");
 
     // datos del formulario
     final data = {
@@ -30,25 +32,29 @@ class Login_Form extends State<Login> {
       "password": passwordController.text,
     };
 
-    // respuesta de la api
-    final response = await post(url, body: data);
+    try {
+      // respuesta de la ap
+      final response = await post(url, body: data);
 
-    // si la respuesta es 200 (ok)
-    if (response.statusCode == 200) {
-      // ToDO guardar jwt en shared preferences
+      // si la respuesta es 200 (ok)
+      if (response.statusCode == 200) {
+        // ToDO guardar jwt en shared preferences
 
-      // redireccionar a la pagina de inicio
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    } else {
-      // mostrar un mensaje de error
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Error, Credenciales incorrectas'),
-        ),
-      );
+        // redireccionar a la pagina de inicio
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+      } else {
+        // mostrar un mensaje de error
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error, Credenciales incorrectas'),
+          ),
+        );
+      }
+    } catch (e) {
+      log(e.toString());
     }
   }
 
