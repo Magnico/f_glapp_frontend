@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:f_shopping_app/ui/Widgets/navBar.dart';
+import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../domain/user.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -16,6 +22,16 @@ class MapScreenState extends State<ProfilePage>
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
 
+  UserController user = UserController();
+
+  @override
+  void initState() {
+    //you are not allowed to add async modifier to initState
+    user.onInit();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +42,7 @@ class MapScreenState extends State<ProfilePage>
             onPressed: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
 
-              prefs.remove('token');
+              prefs.remove('jwt');
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Login()),
@@ -160,14 +176,15 @@ class MapScreenState extends State<ProfilePage>
                               mainAxisSize: MainAxisSize.max,
                               children: <Widget>[
                                 Flexible(
-                                  child: TextField(
-                                    decoration: const InputDecoration(
-                                      hintText: "Usuario 1",
+                                    child: Obx(
+                                  () => TextField(
+                                    decoration: InputDecoration(
+                                      hintText: user.name,
                                     ),
                                     enabled: !_status,
                                     autofocus: !_status,
                                   ),
-                                ),
+                                )),
                               ],
                             )),
                         Padding(
@@ -197,12 +214,13 @@ class MapScreenState extends State<ProfilePage>
                               mainAxisSize: MainAxisSize.max,
                               children: <Widget>[
                                 Flexible(
-                                  child: TextField(
-                                    decoration: const InputDecoration(
-                                        hintText: "Glapp@gmail.com"),
+                                    child: Obx(
+                                  () => TextField(
+                                    decoration:
+                                        InputDecoration(hintText: user.email),
                                     enabled: !_status,
                                   ),
-                                ),
+                                )),
                               ],
                             )),
                         Padding(
