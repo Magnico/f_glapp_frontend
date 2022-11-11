@@ -20,7 +20,7 @@ class User {
         name: json['name'],
         email: json['email'],
         identification_number: json['identification_number'],
-        role: json['role'] | 1,
+        role: json['role'],
         id: json['_id']);
   }
 

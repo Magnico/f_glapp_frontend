@@ -57,7 +57,14 @@ class ReportController extends GetxController {
   }
 
   fetchReports() async {
-    final url = Uri.parse(Config.API_URL + "/reports");
+    UserController user = Get.find<UserController>();
+
+    var endpoint = '/reports';
+
+    if (user.role == 0) {
+      endpoint = "/reports/provider/${user.id}";
+    }
+    final url = Uri.parse(Config.API_URL + endpoint);
 
     final sharedPrefs = await SharedPreferences.getInstance();
 
@@ -141,26 +148,8 @@ class ReportController extends GetxController {
     final response = await post(url, headers: headers, body: jsonEncode(data));
 
     if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-
-      Report report = Report.fromJson(json);
-
-      _reports.add(report);
-      allMakers.add(
-        Marker(
-          draggable: false,
-          markerId: MarkerId(report.id),
-          position: report.location,
-          icon: IconSet[report.bitmap],
-          infoWindow: InfoWindow(
-            title: report.title,
-            snippet: report.state.toString().split('.').last,
-            onTap: () => log(report.location.toString()),
-          ),
-        ),
-      );
+      await fetchReports();
       _reports.refresh();
-      log('reporte guardado');
     } else {
       log(response.body.toString());
     }

@@ -78,7 +78,7 @@ class MapScreenState extends State<DetailReportPage> {
                         Icon(getStateIcon(reporte.state), color: Colors.black)
                       ]),
                   title: Text("Estado "),
-                  subtitle: Text("${reporte.state.toString().split('.').last}"),
+                  subtitle: Text(reporte.state.name),
                 ),
               ],
             ),

@@ -11,38 +11,12 @@ class Report {
   int bitmap;
   String title;
   String desc;
-  ReportStates? state;
+  ReportStates state;
   String idUsuario;
-  List history = [];
   List reportState = <ReportState>[];
 
   Report(this.id, this.location, this.bitmap, this.title, this.desc, this.date,
-      this.idUsuario, this.reportState) {
-    history.add({
-      "state": ReportStates.Publicado,
-      "eventDate": date,
-      "comment": "Reporte creado"
-    });
-    history.add({
-      "state": ReportStates.Pendiente,
-      "eventDate": DateTime.now(),
-      "comment": "Reporte creado\nEn espera de ser revisado"
-    });
-    history.add({
-      "state": ReportStates.Revision,
-      "eventDate": DateTime.now(),
-      "comment":
-          "Reporte creado\nEn espera de ser revisado\nEn espera de ser solucionado"
-    });
-    history.add({
-      "state": ReportStates.Rechazado,
-      "eventDate": DateTime.now(),
-      "comment": "Reporte creado"
-    });
-    state = ReportStates.Solucionado;
-    log("Reporte creado");
-    log(history.toString());
-  }
+      this.state, this.idUsuario, this.reportState);
 
   factory Report.fromJson(Map<String, dynamic> json) {
     var states = json['states'] as List;
@@ -58,6 +32,7 @@ class Report {
       json['title'],
       json['description'],
       DateTime.parse(json['createdAt']),
+      ReportStates.values[json['state']],
       json['user'],
       states,
     );
@@ -69,7 +44,6 @@ class Report {
       "eventDate": DateTime.now(),
       "comment": comment
     };
-    history.add(package);
     this.state = state;
   }
 }

@@ -160,7 +160,9 @@ class NReport_Form extends State<NewReport> {
                       Icons.business_rounded,
                       color: iconColor,
                     ),
-                    SizedBox(width: 20,),
+                    SizedBox(
+                      width: 20,
+                    ),
                     DropdownButton(
                       hint: const Text('Seleccione una empresa'),
                       items: providers.providersList
@@ -304,7 +306,7 @@ class NReport_Form extends State<NewReport> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0)),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (title != null &&
                       title!.isNotEmpty &&
                       desc.text.isNotEmpty) {
