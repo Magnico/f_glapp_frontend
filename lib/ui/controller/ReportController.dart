@@ -52,12 +52,9 @@ class ReportController extends GetxController {
 
     final token = sharedPrefs.getString("jwt");
 
-    log(token!);
-    // sharedPrefs.remove("jwt");
-
     final headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
+      'Authorization': 'Bearer ' + token!
     };
 
     final response = await get(url, headers: headers);

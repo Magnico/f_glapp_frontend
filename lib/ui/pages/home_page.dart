@@ -11,12 +11,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
-import 'package:http/http.dart';
-import 'package:select_form_field/select_form_field.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../config/config.dart';
-import '../../domain/report.dart';
+import '../controller/providerController.dart';
 
 LatLng currentLocation = const LatLng(0, 0);
 final Completer<GoogleMapController> _controller = Completer();
@@ -70,10 +66,16 @@ class HomeState extends State<HomePage> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          ProviderController con = Get.find<ProviderController>();
+
+          await con.fetchProviders();
+
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => NewReport()),
+            MaterialPageRoute(
+                builder: (context) =>
+                    NewReport(providers: con.getProviderList())),
           );
         },
         child: const Icon(Icons.add),

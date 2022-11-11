@@ -5,6 +5,8 @@ import 'package:f_shopping_app/ui/pages/nuevoReporte.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controller/providerController.dart';
+
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
 
@@ -36,10 +38,16 @@ class NotificationPage_Form extends State<NotificationPage> {
       bottomNavigationBar: BNavigationBar(actual, this),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: () {
+          onPressed: () async {
+            ProviderController con = Get.find<ProviderController>();
+
+            await con.fetchProviders();
+
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => NewReport()),
+              MaterialPageRoute(
+                  builder: (context) =>
+                      NewReport(providers: con.getProviderList())),
             );
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

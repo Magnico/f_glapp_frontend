@@ -5,6 +5,8 @@ import 'package:f_shopping_app/ui/pages/nuevoReporte.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controller/providerController.dart';
+
 class Report extends StatefulWidget {
   const Report({Key? key}) : super(key: key);
 
@@ -13,7 +15,6 @@ class Report extends StatefulWidget {
 }
 
 class Report_Form extends State<Report> {
-
   int actual = 1;
   List<Icon> serviceIcons = [
     const Icon(Icons.gas_meter_rounded, color: Colors.black),
@@ -23,23 +24,25 @@ class Report_Form extends State<Report> {
   @override
   Widget build(BuildContext context) {
     ReportController con = Get.find<ReportController>();
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Mis reportes"),
-        leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
-           );
-        }),
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+            }),
         backgroundColor: const Color.fromARGB(255, 47, 91, 223),
       ),
       body: ListView(
         children: [
           for (var report in con.reportes)
-            Expanded(child: 
-              Card(
+            Expanded(
+              child: Card(
                 child: Column(
                   children: [
                     ListTile(
@@ -71,10 +74,16 @@ class Report_Form extends State<Report> {
       bottomNavigationBar: BNavigationBar(actual, this),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: () {
+          onPressed: () async {
+            ProviderController con = Get.find<ProviderController>();
+
+            await con.fetchProviders();
+
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => NewReport()),
+              MaterialPageRoute(
+                  builder: (context) =>
+                      NewReport(providers: con.getProviderList())),
             );
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

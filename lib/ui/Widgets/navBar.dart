@@ -10,10 +10,10 @@ class BNavigationBar extends StatelessWidget {
   var reference;
 
   List<Widget> paginas = [
-    HomePage(),
-    Report(),
-    NotificationPage(),
-    ProfilePage(),
+    const HomePage(),
+    const Report(),
+    const NotificationPage(),
+    const ProfilePage(),
   ];
   int actual;
   //Function(int) onTap;
@@ -31,6 +31,7 @@ class BNavigationBar extends StatelessWidget {
         reference.setState(() {
           actual = value;
         });
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => paginas[actual]),

@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:f_shopping_app/ui/Widgets/datetime.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
+import 'package:f_shopping_app/ui/controller/providerController.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/reportes.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +13,18 @@ import 'package:google_place/google_place.dart';
 import 'package:select_form_field/select_form_field.dart';
 
 class NewReport extends StatefulWidget {
-  NewReport({Key? key}) : super(key: key);
+  const NewReport({Key? key, required this.providers}) : super(key: key);
 
+  final List<Map<String, dynamic>> providers;
   @override
   State<NewReport> createState() => NReport_Form();
 }
 
 class NReport_Form extends State<NewReport> {
   final Color iconColor = Colors.black;
+
+  final ProviderController providers = Get.find<ProviderController>();
+
   final List<Map<String, dynamic>> _empresas = [
     {
       'value': '0',
@@ -155,7 +160,8 @@ class NReport_Form extends State<NewReport> {
                   color: iconColor,
                 ),
                 labelText: 'Empresa',
-                items: _empresas,
+                // Todo add provider icon
+                items: providers.getProviderList(),
                 onChanged: (value) {
                   _empresaSelected = value;
                 },
@@ -287,7 +293,9 @@ class NReport_Form extends State<NewReport> {
                       borderRadius: BorderRadius.circular(20.0)),
                 ),
                 onPressed: () {
-                  if (title != null && title!.isNotEmpty && desc.text.isNotEmpty) {
+                  if (title != null &&
+                      title!.isNotEmpty &&
+                      desc.text.isNotEmpty) {
                     if (_locationSelected == "actual") {
                       desireLocation = con.currentLocation;
                     }

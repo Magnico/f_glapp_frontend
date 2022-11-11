@@ -21,7 +21,8 @@ class Auth {
       user: User(
           email: userData['email'],
           name: userData['name'],
-          identificationNumber: userData['identification_number']),
+          identificationNumber: userData['identification_number'],
+          role: userData['role']),
     );
   }
 }

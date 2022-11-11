@@ -1,16 +1,15 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/user.dart';
 
 class UserController extends GetxController {
   // string observable variable
-  var _name = "".obs;
-  var _email = "".obs;
-  var _identificationNumber = "".obs;
+  final _name = "".obs;
+  final _email = "".obs;
+  final _identificationNumber = "".obs;
 
   get name => _name.value;
   get email => _email.value;
@@ -18,7 +17,6 @@ class UserController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     SharedPreferences.getInstance().then((prefs) {
       final userJson = prefs.getString('user');
 
