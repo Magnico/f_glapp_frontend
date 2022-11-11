@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:http/http.dart';
+import 'package:select_form_field/select_form_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config/config.dart';
@@ -42,14 +43,6 @@ class HomeState extends State<HomePage> {
   late FocusNode _searchFocusNode;
 
   //initializing the reports icons map
-  void loadReportsIcons() async {
-    IconSet[0] =
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
-    IconSet[1] =
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
-    IconSet[2] =
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
-  }
 
   @override
   void initState() {
@@ -58,7 +51,6 @@ class HomeState extends State<HomePage> {
     _googlePlace = GooglePlace(apiKey);
 
     loadActualPosition();
-    loadReportsIcons();
 
     _searchFocusNode = FocusNode();
   }
@@ -91,45 +83,21 @@ class HomeState extends State<HomePage> {
           //aqui se abre el obx
           Obx(() {
             return Expanded(
-              child: GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition:
-                CameraPosition(target: currentLocation, zoom: 15),
-            onMapCreated: (GoogleMapController controller) {
-              if (!_controller.isCompleted) {
-                _controller.complete(controller);
-              }
-            },
-            markers: <Marker>{
-              Marker(
-                draggable: false,
-                markerId: const MarkerId("ME"),
-                position: currentLocation,
-                icon: BitmapDescriptor.defaultMarkerWithHue(
-                    BitmapDescriptor.hueGreen),
-                infoWindow: const InfoWindow(
-                  title: 'Mi Ubicación',
-                ),
-              ),
-              // todo actualizar la lista de reportes de manera dinamica con obx
-              
-            
-              for (var report in con.reportes)
-                Marker(
-                  draggable: false,
-                  markerId: MarkerId(report.id.toString()),
-                  position: report.location,
-                  icon: IconSet[report.bitmap],
-                  infoWindow: InfoWindow(
-                    title: report.title, 
-                    snippet: report.state.toString().split('.').last,
-                    onTap: () => log(report.location.toString()),
-                  ),
-                ),
-            },
-          ));
+                child: GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition:
+                  CameraPosition(target: currentLocation, zoom: 15),
+              onMapCreated: (GoogleMapController controller) async {
+                if (!_controller.isCompleted) {
+                  await con.fetchReports();
+                  log(con.reportes.toString());
+                  _controller.complete(controller);
+                }
+              },
+              markers: con.allMakers.toSet(),
+            ));
           }),
-          
+
           //aqui se cierra el obx
         ],
       ),

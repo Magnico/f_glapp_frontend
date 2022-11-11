@@ -14,19 +14,35 @@ class ReportController extends GetxController {
 
   var _reports = <Report>[].obs;
   var allMakers = <Marker>[].obs;
-  var _amount = [0,0,0];
- 
-  get reportes => _reports.value;
+  var _amount = [0, 0, 0];
+
+  get reportes => _reports;
   get currentLocation => _currentLocation;
+
+  List<BitmapDescriptor> IconSet = [
+    BitmapDescriptor.defaultMarker,
+    BitmapDescriptor.defaultMarker,
+    BitmapDescriptor.defaultMarker
+  ];
+
   String get currentLocationString => _currentLocation.toString();
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    fetchReports();
+    loadReportsIcons();
     /*addReport(0, "Gas", LatLng(10.988829, -74.81239219999999), "nosé", DateTime.now());
     addReport(1, "Agua", LatLng(10.9872183, -74.8126964), "nise", DateTime.now());*/
+  }
+
+  void loadReportsIcons() async {
+    IconSet[0] =
+        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
+    IconSet[1] =
+        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
+    IconSet[2] =
+        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
   }
 
   fetchReports() async {
@@ -51,8 +67,23 @@ class ReportController extends GetxController {
 
       var reports = <Report>[];
 
-      json.forEach((report) {
-        reports.add(Report.fromJson(report));
+      json.forEach((r) {
+        Report report = Report.fromJson(r);
+
+        reports.add(report);
+        allMakers.add(
+          Marker(
+            draggable: false,
+            markerId: MarkerId(report.id),
+            position: report.location,
+            icon: IconSet[report.bitmap],
+            infoWindow: InfoWindow(
+              title: report.title,
+              snippet: report.state.toString().split('.').last,
+              onTap: () => log(report.location.toString()),
+            ),
+          ),
+        );
       });
 
       _reports = reports.obs;
@@ -68,11 +99,12 @@ class ReportController extends GetxController {
     _currentLocation = location;
     update();
   }
-  
-  void addReport(int type, String title, LatLng location, String desc, DateTime date) {
-    _reports.add(Report(_reports.length.toString(),location,type,title,desc,date));
+
+  void addReport(
+      int type, String title, LatLng location, String desc, DateTime date) {
+    _reports.add(
+        Report(_reports.length.toString(), location, type, title, desc, date));
     _amount[type]++;
     update();
   }
-  
 }
