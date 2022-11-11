@@ -23,23 +23,7 @@ class Report {
       "eventDate": date,
       "comment": "Reporte creado"
     });
-    history.add({
-      "state": ReportStates.Pendiente,
-      "eventDate": DateTime.now(),
-      "comment": "Reporte creado\nEn espera de ser revisado"
-    });
-    history.add({
-      "state": ReportStates.Revision,
-      "eventDate": DateTime.now(),
-      "comment":
-          "Reporte creado\nEn espera de ser revisado\nEn espera de ser solucionado"
-    });
-    history.add({
-      "state": ReportStates.Rechazado,
-      "eventDate": DateTime.now(),
-      "comment": "Reporte creado"
-    });
-    state = ReportStates.Solucionado;
+    state = ReportStates.Publicado;
     log("Reporte creado");
     log(history.toString());
   }

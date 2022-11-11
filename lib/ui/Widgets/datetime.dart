@@ -76,8 +76,8 @@ class BasicDateTimeField extends StatelessWidget {
                 reference.updateDate(DateTimeField.combine(date, time));
                 return DateTimeField.combine(date, time);
               } else {
-                reference.updateDate(currentValue);
-                return currentValue;
+                reference.updateDate(DateTime.now());
+                return DateTime.now();
               }
             },
           ),

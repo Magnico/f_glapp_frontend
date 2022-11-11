@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
@@ -7,20 +8,27 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class logo extends StatelessWidget {
-  const logo({Key? key}) : super(key: key);
+class logo extends StatefulWidget {
+  logo({Key? key}) : super(key: key);
+
+  @override
+  State<logo> createState() => _logoState();
+}
+
+class _logoState extends State<logo> {
+
 
   @override
   Widget build(BuildContext context) {
     Timer _continue = Timer(const Duration(milliseconds: 1000), () async {
-      UserController controller = Get.find<UserController>();
-      controller.getUser();
-
+      UserController user = Get.find<UserController>();
+      final prefs = await SharedPreferences.getInstance();
+      final jwt = prefs.getString('jwt');
       Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) =>
-                controller.jwt != null ? const HomePage() : const Login(),
+                jwt != null ? const HomePage() : const Login(),
           ));
     });
     return Scaffold(
