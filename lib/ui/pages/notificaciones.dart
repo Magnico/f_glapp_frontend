@@ -23,7 +23,7 @@ class NotificationPage_Form extends State<NotificationPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Mis NotificationPageficaciones"),
+        title: const Text("Mis Notificaciones"),
         leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {

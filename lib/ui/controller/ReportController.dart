@@ -3,6 +3,8 @@ import 'dart:developer';
 
 import 'package:f_shopping_app/domain/report.dart';
 import 'package:f_shopping_app/ui/controller/UserController.dart';
+import 'package:f_shopping_app/ui/pages/detailedReport.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
@@ -16,8 +18,7 @@ class ReportController extends GetxController {
 
   var _reports = <Report>[].obs;
   var allMakers = <Marker>[].obs;
-  var _amount = [0, 0, 0];
-
+  
   get reportes => _reports;
   get currentLocation => _currentLocation;
 
@@ -26,24 +27,27 @@ class ReportController extends GetxController {
     BitmapDescriptor.defaultMarker,
     BitmapDescriptor.defaultMarker
   ];
+  List<IconData> serviceIcons = [
+    Icons.gas_meter_rounded,
+    Icons.water_drop,
+    Icons.lightbulb,
+  ];
 
   String get currentLocationString => _currentLocation.toString();
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     loadReportsIcons();
-    /*addReport(0, "Gas", LatLng(10.988829, -74.81239219999999), "nosé", DateTime.now());
-    addReport(1, "Agua", LatLng(10.9872183, -74.8126964), "nise", DateTime.now());*/
+    fetchReports();
   }
 
   void loadReportsIcons() async {
-    IconSet[0] =
+    IconSet[0] =//GAS
         BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
-    IconSet[1] =
+    IconSet[1] =//LUZ
         BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
-    IconSet[2] =
+    IconSet[2] =//AGUA
         BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
   }
 
@@ -79,7 +83,13 @@ class ReportController extends GetxController {
             infoWindow: InfoWindow(
               title: report.title,
               snippet: report.state.toString().split('.').last,
-              onTap: () => log(report.location.toString()),
+              onTap: () {
+                Navigator.push(
+                  Get.context!,
+                  MaterialPageRoute(
+                    builder: (context) => DetailReportPage(report),
+                  ));
+              },
             ),
           ),
         );
@@ -150,4 +160,9 @@ class ReportController extends GetxController {
     }
     update();
   }
+
+  IconData getIcon(int bitmap) {
+    return serviceIcons[bitmap];
+  }
+  
 }

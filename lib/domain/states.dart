@@ -4,5 +4,4 @@ enum ReportState {
   Revision,
   Rechazado,
   Solucionado,
-  Cerrado,
 }

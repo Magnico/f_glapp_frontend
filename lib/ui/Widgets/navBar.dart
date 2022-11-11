@@ -10,10 +10,10 @@ class BNavigationBar extends StatelessWidget {
   var reference;
 
   List<Widget> paginas = [
-    const HomePage(),
-    const Report(),
-    const NotificationPage(),
-    const ProfilePage(),
+    HomePage(),
+    ReportPage(),
+    NotificationPage(),
+    ProfilePage(),
   ];
   int actual;
   //Function(int) onTap;
