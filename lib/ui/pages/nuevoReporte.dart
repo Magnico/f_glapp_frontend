@@ -13,9 +13,8 @@ import 'package:google_place/google_place.dart';
 import 'package:select_form_field/select_form_field.dart';
 
 class NewReport extends StatefulWidget {
-  const NewReport({Key? key, required this.providers}) : super(key: key);
+  const NewReport({Key? key}) : super(key: key);
 
-  final List<Map<String, dynamic>> providers;
   @override
   State<NewReport> createState() => NReport_Form();
 }
@@ -152,20 +151,20 @@ class NReport_Form extends State<NewReport> {
               alignment: Alignment.center,
               padding: const EdgeInsets.only(left: 0.0, right: 10.0),
               //Debería ser un selector de la empresa
-              child: SelectFormField(
-                type: SelectFormFieldType.dropdown,
-                initialValue: '0',
-                icon: Icon(
-                  Icons.location_city_rounded,
-                  color: iconColor,
-                ),
-                labelText: 'Empresa',
-                // Todo add provider icon
-                items: providers.getProviderList(),
-                onChanged: (value) {
-                  _empresaSelected = value;
-                },
-              ),
+              child: Obx(() => DropdownButton(
+                    // Todo add provider icon
+                    items: providers.providersList
+                        .map((e) => DropdownMenuItem(
+                            child: Text(e.label), value: e.value))
+                        .toList(),
+                    value: providers
+                        .providersList[int.parse(_empresaSelected)].value,
+                    onChanged: (value) {
+                      setState(() {
+                        _empresaSelected = value.toString();
+                      });
+                    },
+                  )),
             ),
             const Divider(
               height: 24.0,

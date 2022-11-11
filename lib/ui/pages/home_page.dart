@@ -66,17 +66,9 @@ class HomeState extends State<HomePage> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          ProviderController con = Get.find<ProviderController>();
-
-          await con.fetchProviders();
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    NewReport(providers: con.getProviderList())),
-          );
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const NewReport()));
         },
         child: const Icon(Icons.add),
       ),

@@ -10,7 +10,16 @@ import '../../domain/user.dart';
 class ProviderController extends GetxController {
   final _providers = <User>[].obs;
 
-  get providers => _providers;
+  final providersList = [].obs;
+  RxList<User> get providers => _providers;
+
+  @override
+  onInit() {
+    super.onInit();
+    providersList.add(item('', ''));
+
+    fetchProviders();
+  }
 
   fetchProviders() async {
     final url = Uri.parse(Config.API_URL + "/providers");
@@ -26,22 +35,21 @@ class ProviderController extends GetxController {
 
     final response = await get(url, headers: headers);
 
-    for (var provider in jsonDecode(response.body)) {
-      _providers.add(User.fromJson(provider));
-    }
-  }
-
-  getProviderList() {
-    final List<Map<String, dynamic>> _empresas = [];
-
     int index = 0;
-
-    for (User p in _providers) {
-      _empresas.add({'value': index.toString(), 'label': p.name});
+    providersList.clear();
+    for (var provider in jsonDecode(response.body)) {
+      var p = User.fromJson(provider);
+      _providers.add(p);
+      providersList.add(item(p.name, index.toString()));
 
       index++;
     }
-
-    return _empresas;
   }
+}
+
+class item {
+  String label;
+  String value;
+
+  item(this.label, this.value);
 }

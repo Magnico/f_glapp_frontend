@@ -39,15 +39,9 @@ class NotificationPage_Form extends State<NotificationPage> {
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () async {
-            ProviderController con = Get.find<ProviderController>();
-
-            await con.fetchProviders();
-
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      NewReport(providers: con.getProviderList())),
+              MaterialPageRoute(builder: (context) => const NewReport()),
             );
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

@@ -74,16 +74,10 @@ class Report_Form extends State<Report> {
       bottomNavigationBar: BNavigationBar(actual, this),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: () async {
-            ProviderController con = Get.find<ProviderController>();
-
-            await con.fetchProviders();
-
+          onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      NewReport(providers: con.getProviderList())),
+              MaterialPageRoute(builder: (context) => const NewReport()),
             );
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
