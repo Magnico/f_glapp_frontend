@@ -5,6 +5,7 @@ import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,16 +22,7 @@ class MapScreenState extends State<ProfilePage>
   int actual = 3;
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
-
-  UserController user = UserController();
-
-  @override
-  void initState() {
-    //you are not allowed to add async modifier to initState
-    user.onInit();
-
-    super.initState();
-  }
+  UserController user = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
