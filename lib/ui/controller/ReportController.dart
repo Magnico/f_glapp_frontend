@@ -89,6 +89,9 @@ class ReportController extends GetxController {
 
       var reports = <Report>[];
 
+      allMakers.clear();
+      reports.clear();
+
       json.forEach((r) {
         Report report = Report.fromJson(r);
 
@@ -101,7 +104,7 @@ class ReportController extends GetxController {
             icon: IconSet[report.bitmap],
             infoWindow: InfoWindow(
               title: report.title,
-              snippet: report.state.toString().split('.').last,
+              snippet: report.state.name,
               onTap: () {
                 Navigator.push(
                     Get.context!,
@@ -116,7 +119,7 @@ class ReportController extends GetxController {
 
       _reports = reports.obs;
       _reports.refresh();
-      log('reportes guardados');
+      update();
     } else {
       log(response.body.toString());
     }
@@ -198,7 +201,9 @@ class ReportController extends GetxController {
     };
 
     final data = {
-      'state': state.name,
+      'provider': userController.id,
+      'report': report,
+      'state': state.index,
       'comment': comment,
     };
 

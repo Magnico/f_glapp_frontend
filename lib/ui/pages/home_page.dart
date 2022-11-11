@@ -33,6 +33,8 @@ class HomeState extends State<HomePage> {
   ];
   int actual = 0;
 
+  ReportController con = Get.find<ReportController>();
+
   late GooglePlace _googlePlace;
   List<AutocompletePrediction> _places = [];
   final searchTextController = TextEditingController();
@@ -60,7 +62,6 @@ class HomeState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    ReportController con = Get.find<ReportController>();
     con.changeLocation(currentLocation);
 
     return Scaffold(
@@ -82,9 +83,9 @@ class HomeState extends State<HomePage> {
               initialCameraPosition:
                   CameraPosition(target: currentLocation, zoom: 15),
               onMapCreated: (GoogleMapController controller) async {
+                await con.fetchReports();
+                log('fetch reports');
                 if (!_controller.isCompleted) {
-                  await con.fetchReports();
-                  log(con.reportes.toString());
                   _controller.complete(controller);
                 }
               },

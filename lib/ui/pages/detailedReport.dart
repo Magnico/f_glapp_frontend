@@ -21,15 +21,26 @@ class DetailReportPage extends StatefulWidget {
 class MapScreenState extends State<DetailReportPage> {
   int actual = 3;
   final FocusNode myFocusNode = FocusNode();
+  late ReportStates _toState = ReportStates.values[widget.reporte.state.index];
+
+  var stados = [
+    ReportStates.Publicado,
+    ReportStates.Revision,
+    ReportStates.Rechazado,
+    ReportStates.Solucionado
+  ]
+      .map((e) => DropdownMenuItem(
+            child: Text(e.toString().split('.').last),
+            value: e,
+          ))
+      .toList();
 
   @override
   Widget build(BuildContext context) {
     ReportController con = Get.find<ReportController>();
     UserController user = Get.find<UserController>();
-    bool _isEnterprise = user.role == 0;
-    ReportStates _toState;
     var reporte = widget.reporte;
-    _toState = reporte.state;
+    bool _isEnterprise = user.role == 0;
     return Scaffold(
       appBar: AppBar(
         title: Text("Reporte - ${reporte.id}"),
@@ -112,18 +123,8 @@ class MapScreenState extends State<DetailReportPage> {
                       width: 20,
                     ),
                     DropdownButton(
-                      items: [
-                        ReportStates.Publicado,
-                        ReportStates.Pendiente,
-                        ReportStates.Revision,
-                        ReportStates.Rechazado,
-                        ReportStates.Solucionado
-                      ]
-                          .map((e) => DropdownMenuItem(
-                                child: Text(e.toString().split('.').last),
-                                value: e,
-                              ))
-                          .toList(),
+                      items: stados,
+                      value: _toState,
                       onChanged: (value) {
                         setState(() {
                           _toState = value as ReportStates;
@@ -149,26 +150,30 @@ class MapScreenState extends State<DetailReportPage> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: ElevatedButton(
-                          child: const Text("Guardar",
-                              style: TextStyle(
-                                color: Colors.white,
-                              )),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0)),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              con.updateState(
-                                  reporte.id, widget.desc.text, _toState);
-                            });
-                          },
+                    Container(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      margin: const EdgeInsets.only(
+                          left: 40.0, right: 40.0, top: 10.0, bottom: 50),
+                      child: ElevatedButton(
+                        child: const Text("Guardar",
+                            style: TextStyle(
+                              color: Colors.white,
+                            )),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0)),
                         ),
+                        onPressed: () async {
+                          con.updateState(
+                              reporte.id, widget.desc.text, _toState);
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()),
+                          );
+                        },
                       ),
                     )
                   ],
@@ -228,8 +233,6 @@ IconData getStateIcon(state) {
   switch (state) {
     case ReportStates.Publicado:
       return Icons.publish;
-    case ReportStates.Pendiente:
-      return Icons.access_time_outlined;
     case ReportStates.Revision:
       return Icons.remove_red_eye_outlined;
     case ReportStates.Rechazado:

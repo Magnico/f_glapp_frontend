@@ -15,7 +15,6 @@ class ReportPage extends StatefulWidget {
 }
 
 class Report_Form extends State<ReportPage> {
-
   int actual = 1;
   List<Icon> serviceIcons = [
     const Icon(Icons.gas_meter_rounded, color: Colors.black),
@@ -49,7 +48,8 @@ class Report_Form extends State<ReportPage> {
                   children: [
                     ListTile(
                       leading: serviceIcons[report.bitmap],
-                      title: Text(report.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      title: Text(report.title,
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text(report.state.toString().split('.').last),
                     ),
                     Row(
@@ -59,11 +59,12 @@ class Report_Form extends State<ReportPage> {
                           child: const Text('Ver'),
                           onPressed: () {
                             Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailReportPage(report),
-                              ));
-                              },
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetailReportPage(report),
+                                ));
+                          },
                         ),
                         const SizedBox(width: 8),
                         TextButton(
@@ -75,7 +76,9 @@ class Report_Form extends State<ReportPage> {
                         const SizedBox(width: 8),
                       ],
                     ),
-                    SizedBox(height: 10,)
+                    SizedBox(
+                      height: 10,
+                    )
                   ],
                 ),
               ),

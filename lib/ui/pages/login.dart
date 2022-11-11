@@ -4,9 +4,12 @@ import 'dart:developer';
 import 'package:f_shopping_app/domain/auth.dart';
 import 'package:f_shopping_app/ui/Widgets/button.dart';
 import 'package:f_shopping_app/ui/Widgets/passwordField.dart';
+import 'package:f_shopping_app/ui/controller/ReportController.dart';
+import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/sign_up.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -49,6 +52,11 @@ class Login_Form extends State<Login> {
 
         sharedPref.setString("jwt", auth.jwt);
         sharedPref.setString("user", jsonEncode(auth.user));
+
+        UserController user = Get.find<UserController>();
+        user.getUser();
+        ReportController report = Get.find<ReportController>();
+        report.fetchReports();
 
         // redireccionar a la pagina de inicio
         Navigator.push(
