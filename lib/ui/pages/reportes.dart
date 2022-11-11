@@ -40,6 +40,7 @@ class Report_Form extends State<Report> {
       ),
       body: ListView(
         children: [
+          // todo make it dynamically like at home page map
           for (var report in con.reportes)
             Expanded(
               child: Card(
@@ -60,7 +61,9 @@ class Report_Form extends State<Report> {
                         const SizedBox(width: 8),
                         TextButton(
                           child: const Text('Eliminar'),
-                          onPressed: () {},
+                          onPressed: () async {
+                            await con.delteReport(report.id);
+                          },
                         ),
                         const SizedBox(width: 8),
                       ],

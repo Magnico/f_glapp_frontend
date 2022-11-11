@@ -150,4 +150,28 @@ class ReportController extends GetxController {
     }
     update();
   }
+
+  delteReport(String id) async {
+    final url = Uri.parse(Config.API_URL + "/reports/$id");
+
+    UserController userController = Get.find<UserController>();
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + userController.jwt!
+    };
+
+    final response = await delete(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+
+      _reports.removeWhere((element) => element.id == id);
+      allMakers.removeWhere((element) => element.markerId.value == id);
+      _reports.refresh();
+      log('reporte eliminado');
+    } else {
+      log(response.body.toString());
+    }
+  }
 }
