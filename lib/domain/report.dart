@@ -48,7 +48,7 @@ class Report {
       json['_id'],
       LatLng(json['lat'], json['lng']),
       json['type'],
-      json['description'],
+      json['title'],
       json['description'],
       DateTime.parse(json['createdAt']),
       json['user'],
