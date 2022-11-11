@@ -48,6 +48,7 @@ class Login_Form extends State<Login> {
         final auth = Auth.fromJson(json);
 
         sharedPref.setString("jwt", auth.jwt);
+        sharedPref.setString("user", jsonEncode(auth.user));
 
         // redireccionar a la pagina de inicio
         Navigator.push(
