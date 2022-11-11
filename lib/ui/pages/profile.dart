@@ -136,7 +136,7 @@ class MapScreenState extends State<ProfilePage>
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
-                                    _status ? _getEditIcon() : Container(),
+                                    Container(),
                                   ],
                                 )
                               ],
@@ -337,7 +337,7 @@ class MapScreenState extends State<ProfilePage>
             child: Padding(
               padding: const EdgeInsets.only(right: 10.0),
               child: ElevatedButton(
-                child: const Text("Save",
+                child: const Text("Guardar",
                     style: TextStyle(
                       color: Colors.white,
                     )),

@@ -29,6 +29,7 @@ class MapScreenState extends State<DetailReportPage> {
     bool _isEnterprise = user.role == 0;
     ReportStates _toState;
     var reporte = widget.reporte;
+    _toState = reporte.state;
     return Scaffold(
       appBar: AppBar(
         title: Text("Reporte - ${reporte.id}"),
@@ -101,7 +102,7 @@ class MapScreenState extends State<DetailReportPage> {
             Visibility(
               visible: _isEnterprise,
               child: Container(
-                child: Row(
+                child: Column(
                   children: [
                     Icon(
                       Icons.change_circle_rounded,
@@ -126,8 +127,6 @@ class MapScreenState extends State<DetailReportPage> {
                       onChanged: (value) {
                         setState(() {
                           _toState = value as ReportStates;
-                          con.changeState(
-                              reporte.id, _toState, widget.desc.text);
                         });
                       },
                     ),
@@ -150,6 +149,28 @@ class MapScreenState extends State<DetailReportPage> {
                         ),
                       ),
                     ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: ElevatedButton(
+                          child: const Text("Guardar",
+                              style: TextStyle(
+                                color: Colors.white,
+                              )),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              con.updateState(
+                                  reporte.id, widget.desc.text, _toState);
+                            });
+                          },
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
