@@ -24,6 +24,7 @@ class SignUp_Form extends State<SignUp> {
     final idController = TextEditingController();
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
+    final numController = TextEditingController();
 
     handleSignup() async {
       // url base de la api
@@ -38,7 +39,8 @@ class SignUp_Form extends State<SignUp> {
         "password": passwordController.text,
         "name": nameController.text,
         "identification_number": idController.text,
-        "role": 1
+        "role": 1,
+        "number":numController.text,
       };
 
       // respuesta de la api
@@ -167,6 +169,58 @@ class SignUp_Form extends State<SignUp> {
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: 'ingresa el numero de identificación ',
+                    hintStyle: TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Divider(
+          height: 24.0,
+        ),
+        Row(
+          children: const <Widget>[
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 40.0),
+                child: Text(
+                  "TELEFONO",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 82, 122, 255),
+                    fontSize: 15.0,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                  color: Color.fromARGB(255, 82, 122, 255),
+                  width: 0.5,
+                  style: BorderStyle.solid),
+            ),
+          ),
+          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: TextField(
+                  controller: numController,
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.left,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'ingresa el numero telefonico ',
                     hintStyle: TextStyle(color: Colors.grey),
                   ),
                 ),
