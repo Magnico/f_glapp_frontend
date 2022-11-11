@@ -14,8 +14,8 @@ class Report {
   String idUsuario;
   List history = [];
 
-  Report(
-      this.id, this.location, this.bitmap, this.title, this.desc, this.date, this.idUsuario) {
+  Report(this.id, this.location, this.bitmap, this.title, this.desc, this.date,
+      this.idUsuario) {
     history.add({
       "state": ReportState.Publicado,
       "eventDate": date,
@@ -29,7 +29,8 @@ class Report {
     history.add({
       "state": ReportState.Revision,
       "eventDate": DateTime.now(),
-      "comment": "Reporte creado\nEn espera de ser revisado\nEn espera de ser solucionado"
+      "comment":
+          "Reporte creado\nEn espera de ser revisado\nEn espera de ser solucionado"
     });
     history.add({
       "state": ReportState.Rechazado,
@@ -46,7 +47,7 @@ class Report {
     return Report(
       json['_id'],
       LatLng(json['lat'], json['lng']),
-      0,
+      json['type'],
       json['description'],
       json['description'],
       DateTime.parse(json['createdAt']),
@@ -55,7 +56,7 @@ class Report {
   }
 
   void changeStatus(ReportState state, String comment) {
-    var package= {
+    var package = {
       "state": state,
       "eventDate": DateTime.now(),
       "comment": comment

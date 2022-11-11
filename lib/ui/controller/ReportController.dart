@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:f_shopping_app/domain/report.dart';
 import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/detailedReport.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
@@ -43,12 +46,14 @@ class ReportController extends GetxController {
   }
 
   void loadReportsIcons() async {
+    const size = Size(40, 40);
+
     IconSet[0] = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(), 'images/gas.png');
+        const ImageConfiguration(size: size), 'images/gas.png');
     IconSet[1] = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(), 'images/water.png');
+        const ImageConfiguration(size: size), 'images/water.png');
     IconSet[2] = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(), 'images/energy.png');
+        const ImageConfiguration(size: size), 'images/energy.png');
   }
 
   fetchReports() async {
@@ -128,6 +133,7 @@ class ReportController extends GetxController {
       'provider': provider,
       'lat': location.latitude,
       'lng': location.longitude,
+      'title': title,
       'description': desc,
       'createdAt': date.toString()
     };
