@@ -187,6 +187,32 @@ class ReportController extends GetxController {
     }
   }
 
+  updateState(String report, String comment, ReportStates state) async {
+    final url = Uri.parse(Config.API_URL + "/reports/$report/state");
+
+    UserController userController = Get.find<UserController>();
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + userController.jwt!
+    };
+
+    final data = {
+      'state': state.name,
+      'comment': comment,
+    };
+
+    final response = await post(url, headers: headers, body: jsonEncode(data));
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+
+      fetchReports();
+    } else {
+      log(response.body.toString());
+    }
+  }
+
   IconData getIcon(int bitmap) {
     return serviceIcons[bitmap];
   }
