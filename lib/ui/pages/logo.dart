@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
@@ -8,8 +9,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class logo extends StatelessWidget {
-  const logo({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     Timer _continue = Timer(const Duration(milliseconds: 1000), () async {

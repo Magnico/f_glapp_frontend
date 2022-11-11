@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:f_shopping_app/domain/report.dart';
+import 'package:f_shopping_app/domain/states.dart';
 import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/detailedReport.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,12 @@ class ReportController extends GetxController {
         const ImageConfiguration(size: size), 'images/water.png');
     IconSet[2] = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(size: size), 'images/energy.png');
+  }
+
+  void changeState(String id, ReportStates state, String comment) async {
+    final report = _reports.firstWhere((element) => element.id == id);
+    report.changeStatus(state, comment);
+    update();
   }
 
   fetchReports() async {

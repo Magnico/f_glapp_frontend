@@ -3,7 +3,9 @@ import 'package:f_shopping_app/domain/reportState.dart';
 import 'package:f_shopping_app/domain/states.dart';
 import 'package:f_shopping_app/ui/Widgets/navBar.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
+import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
+import 'package:f_shopping_app/domain/states.dart';
 import 'package:f_shopping_app/ui/pages/reportes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,7 @@ import 'package:get/get.dart';
 class DetailReportPage extends StatefulWidget {
   Report reporte;
   DetailReportPage(this.reporte, {Key? key}) : super(key: key);
+  TextEditingController desc = TextEditingController();
   @override
   MapScreenState createState() => MapScreenState();
 }
@@ -22,6 +25,9 @@ class MapScreenState extends State<DetailReportPage> {
   @override
   Widget build(BuildContext context) {
     ReportController con = Get.find<ReportController>();
+    UserController user = Get.find<UserController>();
+    bool _isEnterprise = user.role == 0;
+    ReportStates _toState;
     var reporte = widget.reporte;
     return Scaffold(
       appBar: AppBar(
@@ -82,7 +88,6 @@ class MapScreenState extends State<DetailReportPage> {
                 ),
               ],
             ),
-            //tarjeta con la descripción
             Card(
               child: Column(
                 children: [
@@ -91,6 +96,62 @@ class MapScreenState extends State<DetailReportPage> {
                     subtitle: Text(reporte.desc),
                   ),
                 ],
+              ),
+            ),
+            Visibility(
+              visible: _isEnterprise,
+              child: Container(
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.change_circle_rounded,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    DropdownButton(
+                      items: [
+                        ReportStates.Publicado,
+                        ReportStates.Pendiente,
+                        ReportStates.Revision,
+                        ReportStates.Rechazado,
+                        ReportStates.Solucionado
+                      ]
+                          .map((e) => DropdownMenuItem(
+                                child: Text(e.toString().split('.').last),
+                                value: e,
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _toState = value as ReportStates;
+                          con.changeState(
+                              reporte.id, _toState, widget.desc.text);
+                        });
+                      },
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: const EdgeInsets.only(
+                          left: 40.0, right: 40.0, top: 10.0),
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+                      child: TextField(
+                        controller: widget.desc,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.comment_rounded,
+                            color: Colors.black,
+                          ),
+                          labelText: 'Comentario',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Center(

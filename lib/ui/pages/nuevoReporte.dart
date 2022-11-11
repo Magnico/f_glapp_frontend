@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:f_shopping_app/ui/Widgets/datetime.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
+import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/controller/providerController.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/reportes.dart';
@@ -21,20 +22,13 @@ class NewReport extends StatefulWidget {
   State<NewReport> createState() => NReport_Form();
 }
 
-class NReport_Form extends State<NewReport> {
+class NReport_Form extends State<NewReport>
+    with SingleTickerProviderStateMixin {
   final Color iconColor = Colors.black;
 
   final ProviderController providers = Get.find<ProviderController>();
-
-  final List<Map<String, dynamic>> _empresas = [
-    {
-      'value': '0',
-      'label': 'Gases del Caribe',
-      'icon': const Icon(Icons.gas_meter_rounded)
-    },
-    {'value': '1', 'label': 'Air-E', 'icon': const Icon(Icons.lightbulb)},
-    {'value': '2', 'label': 'Triple A', 'icon': const Icon(Icons.water_drop)}
-  ];
+  ReportController con = Get.find<ReportController>();
+  UserController user = Get.find<UserController>();
 
   //REQUISITOS PARA EL AUTOCOMPLETADO DE LA LOCACIÓN
   late GooglePlace _googlePlace;
@@ -50,7 +44,9 @@ class NReport_Form extends State<NewReport> {
   String _empresaSelected = '0';
   String? title;
   TextEditingController desc = TextEditingController();
+
   DateTime date = DateTime.now();
+  bool _isEnterprise = false;
 
   void updateDate(DateTime fecha) {
     log(fecha.toString());
@@ -74,7 +70,7 @@ class NReport_Form extends State<NewReport> {
 
   @override
   Widget build(BuildContext context) {
-    ReportController con = Get.find<ReportController>();
+    _isEnterprise = user.role == 0;
 
     return Scaffold(
         appBar: AppBar(
@@ -153,44 +149,50 @@ class NReport_Form extends State<NewReport> {
               alignment: Alignment.center,
               padding: const EdgeInsets.only(left: 0.0, right: 10.0),
               //Debería ser un selector de la empresa
-              child: Obx(() {
-                return Row(
-                  children: [
-                    Icon(
-                      Icons.business_rounded,
-                      color: iconColor,
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    DropdownButton(
-                      hint: const Text('Seleccione una empresa'),
-                      items: providers.providersList
-                          .map((e) => DropdownMenuItem(
-                              child: Text(e.label), value: e.value))
-                          .toList(),
-                      value: providers
-                          .providersList[int.parse(_empresaSelected)].value,
-                      onChanged: (value) {
-                        setState(() {
-                          _empresaSelected = value.toString();
-                        });
-                      },
-                    ),
-                  ],
-                );
-              }),
+              child: Visibility(
+                visible: _isEnterprise == false,
+                child: Obx(() {
+                  return Row(
+                    children: [
+                      Icon(
+                        Icons.business_rounded,
+                        color: iconColor,
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      DropdownButton(
+                        hint: const Text('Seleccione una empresa'),
+                        items: providers.providersList
+                            .map((e) => DropdownMenuItem(
+                                child: Text(e.label), value: e.value))
+                            .toList(),
+                        value: providers
+                            .providersList[int.parse(_empresaSelected)].value,
+                        onChanged: (value) {
+                          setState(() {
+                            _empresaSelected = value.toString();
+                          });
+                        },
+                      ),
+                    ],
+                  );
+                }),
+              ),
             ),
             const Divider(
               height: 24.0,
             ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-              alignment: Alignment.center,
-              padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-              child: BasicDateTimeField("Fecha de reporte", this),
-            ),
+            Visibility(
+                visible: _isEnterprise,
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin:
+                      const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+                  child: BasicDateTimeField("Fecha de reporte", this),
+                )),
             const Divider(
               height: 24.0,
             ),
@@ -236,10 +238,12 @@ class NReport_Form extends State<NewReport> {
                   controller: searchTextController,
                   decoration: const InputDecoration(
                     hintText: 'Ingrese su ubicación',
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle:
+                        TextStyle(color: Color.fromARGB(255, 14, 11, 11)),
                     prefixIcon: Icon(Icons.search, color: Colors.black),
                   ),
                   onChanged: (value) {
+                    log("cambie");
                     if (_debounce?.isActive ?? false) _debounce!.cancel();
                     _debounce = Timer(const Duration(milliseconds: 1000), () {
                       if (value.isNotEmpty) {
@@ -314,8 +318,13 @@ class NReport_Form extends State<NewReport> {
                       desireLocation = con.currentLocation;
                     }
 
-                    String provider =
-                        providers.providers[int.parse(_empresaSelected)].id;
+                    String provider = user.id;
+
+                    if (!_isEnterprise) {
+                      provider =
+                          providers.providers[int.parse(_empresaSelected)].id;
+                    }
+
                     con.addReport(
                         provider, title!, desireLocation, desc.text, date);
                     Navigator.push(
