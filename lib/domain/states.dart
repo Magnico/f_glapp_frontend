@@ -1,4 +1,4 @@
-enum ReportState {
+enum ReportStates {
   Publicado,
   Pendiente,
   Revision,
