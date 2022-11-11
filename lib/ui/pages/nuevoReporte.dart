@@ -153,20 +153,31 @@ class NReport_Form extends State<NewReport> {
               alignment: Alignment.center,
               padding: const EdgeInsets.only(left: 0.0, right: 10.0),
               //Debería ser un selector de la empresa
-              child: Obx(() => DropdownButton(
-                    // Todo add provider icon
-                    items: providers.providersList
-                        .map((e) => DropdownMenuItem(
-                            child: Text(e.label), value: e.value))
-                        .toList(),
-                    value: providers
-                        .providersList[int.parse(_empresaSelected)].value,
-                    onChanged: (value) {
-                      setState(() {
-                        _empresaSelected = value.toString();
-                      });
-                    },
-                  )),
+              child: Obx(() {
+                return Row(
+                  children: [
+                    Icon(
+                      Icons.business_rounded,
+                      color: iconColor,
+                    ),
+                    SizedBox(width: 20,),
+                    DropdownButton(
+                      hint: const Text('Seleccione una empresa'),
+                      items: providers.providersList
+                          .map((e) => DropdownMenuItem(
+                              child: Text(e.label), value: e.value))
+                          .toList(),
+                      value: providers
+                          .providersList[int.parse(_empresaSelected)].value,
+                      onChanged: (value) {
+                        setState(() {
+                          _empresaSelected = value.toString();
+                        });
+                      },
+                    ),
+                  ],
+                );
+              }),
             ),
             const Divider(
               height: 24.0,
