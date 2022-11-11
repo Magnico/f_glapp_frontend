@@ -14,6 +14,7 @@ void main() {
   );
   Get.lazyPut<ReportController>(() => ReportController());
   Get.lazyPut<ProviderController>(() => ProviderController());
+  Get.lazyPut<ReportController>(() => ReportController());
 
   runApp(MyApp());
 }

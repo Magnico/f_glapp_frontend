@@ -25,7 +25,7 @@ class UserController extends GetxController {
 
         _name.value = user.name;
         _email.value = user.email;
-        _identificationNumber.value = user.identificationNumber;
+        _identificationNumber.value = user.identification_number;
       }
     });
 

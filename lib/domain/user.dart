@@ -1,31 +1,36 @@
 class User {
   final String name;
   final String email;
-  final String identificationNumber;
+  final String identification_number;
   final int role;
+  final String id;
 
   // Todo - add more user fields
 
-  const User(
-      {required this.name,
-      required this.email,
-      required this.identificationNumber,
-      required this.role});
+  const User({
+    required this.name,
+    required this.email,
+    required this.identification_number,
+    required this.role,
+    required this.id,
+  });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
         name: json['name'],
         email: json['email'],
-        identificationNumber: json['identification_number'],
-        role: json['role'] | 1);
+        identification_number: json['identification_number'],
+        role: json['role'] | 1,
+        id: json['_id']);
   }
 
   Map toJson() {
     return {
       'name': name,
       'email': email,
-      'identificationNumber': identificationNumber,
-      'role': role
+      'identification_number': identification_number,
+      'role': role,
+      '_id': id,
     };
   }
 }

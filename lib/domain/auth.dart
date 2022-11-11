@@ -17,12 +17,12 @@ class Auth {
     final userData = json['result'];
 
     return Auth(
-      jwt: json['token'],
-      user: User(
-          email: userData['email'],
-          name: userData['name'],
-          identificationNumber: userData['identification_number'],
-          role: userData['role']),
-    );
+        jwt: json['token'],
+        user: User(
+            email: userData['email'],
+            name: userData['name'],
+            identification_number: userData['identification_number'],
+            role: userData['role'],
+            id: userData['_id']));
   }
 }

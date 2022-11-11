@@ -12,6 +12,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:select_form_field/select_form_field.dart';
 
+import '../../domain/user.dart';
+
 class NewReport extends StatefulWidget {
   const NewReport({Key? key}) : super(key: key);
 
@@ -298,8 +300,11 @@ class NReport_Form extends State<NewReport> {
                     if (_locationSelected == "actual") {
                       desireLocation = con.currentLocation;
                     }
-                    con.addReport(int.parse(_empresaSelected), title!,
-                        desireLocation, desc.text, date);
+
+                    String provider =
+                        providers.providers[int.parse(_empresaSelected)].id;
+                    con.addReport(
+                        provider, title!, desireLocation, desc.text, date);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => HomePage()),
