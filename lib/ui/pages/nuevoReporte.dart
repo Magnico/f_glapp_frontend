@@ -84,7 +84,7 @@ class NReport_Form extends State<NewReport> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Report()),
+                  MaterialPageRoute(builder: (context) => const ReportPage()),
                 );
               }),
           backgroundColor: const Color.fromARGB(255, 47, 91, 223),
