@@ -221,4 +221,14 @@ class ReportController extends GetxController {
   IconData getIcon(int bitmap) {
     return serviceIcons[bitmap];
   }
+
+  getReports() {
+    UserController user = Get.find<UserController>();
+
+    if (user.role == 0) {
+      return _reports;
+    } else {
+      return _reports.where((element) => element.idUsuario == user.id).toList();
+    }
+  }
 }

@@ -41,47 +41,45 @@ class Report_Form extends State<ReportPage> {
       body: ListView(
         children: [
           // todo make it dynamically like at home page map
-          for (var report in con.reportes)
-            if (report.idUsuario == user.id)
-              Card(
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: serviceIcons[report.bitmap],
-                      title: Text(report.title,
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text(report.state.toString().split('.').last),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          child: const Text('Ver'),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailReportPage(report),
-                                ));
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        TextButton(
-                          child: const Text('Eliminar'),
-                          onPressed: () async {
-                            await con.delteReport(report.id);
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    )
-                  ],
-                ),
+          for (var report in con.getReports())
+            Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: serviceIcons[report.bitmap],
+                    title: Text(report.title,
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text(report.state.toString().split('.').last),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        child: const Text('Ver'),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailReportPage(report),
+                              ));
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                      TextButton(
+                        child: const Text('Eliminar'),
+                        onPressed: () async {
+                          await con.delteReport(report.id);
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  )
+                ],
               ),
+            ),
         ],
       ),
       bottomNavigationBar: BNavigationBar(actual, this),
