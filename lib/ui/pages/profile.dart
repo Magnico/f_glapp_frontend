@@ -1,6 +1,8 @@
 import 'package:f_shopping_app/ui/Widgets/navBar.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
+import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -8,7 +10,8 @@ class ProfilePage extends StatefulWidget {
   MapScreenState createState() => MapScreenState();
 }
 
-class MapScreenState extends State<ProfilePage> with SingleTickerProviderStateMixin {
+class MapScreenState extends State<ProfilePage>
+    with SingleTickerProviderStateMixin {
   int actual = 3;
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
@@ -17,13 +20,29 @@ class MapScreenState extends State<ProfilePage> with SingleTickerProviderStateMi
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+
+              prefs.remove('token');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Login()),
+              );
+            },
+          )
+        ],
         title: const Text("Perfil"),
-        leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
-           );
-        }),
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+            }),
         backgroundColor: const Color.fromARGB(255, 47, 91, 223),
       ),
       body: Container(
@@ -37,7 +56,6 @@ class MapScreenState extends State<ProfilePage> with SingleTickerProviderStateMi
                   color: Colors.white,
                   child: Column(
                     children: <Widget>[
-                      
                       Padding(
                         padding: const EdgeInsets.only(top: 20.0),
                         child: Stack(fit: StackFit.loose, children: <Widget>[
