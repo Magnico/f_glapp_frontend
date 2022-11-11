@@ -1,17 +1,18 @@
 import 'package:f_shopping_app/ui/pages/home_page.dart';
+import 'package:f_shopping_app/ui/pages/notificaciones.dart';
 import 'package:f_shopping_app/ui/pages/reportes.dart';
 import 'package:f_shopping_app/ui/pages/profile.dart';
 import 'package:flutter/material.dart';
 
 class BNavigationBar extends StatelessWidget {
   BNavigationBar(this.actual, this.reference, {Key? key}) : super(key: key);
-  
+
   var reference;
 
   List<Widget> paginas = [
     HomePage(),
     Report(),
-    HomePage(),
+    NotificationPage(),
     ProfilePage(),
   ];
   int actual;
