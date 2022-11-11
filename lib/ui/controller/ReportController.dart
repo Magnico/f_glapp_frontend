@@ -43,12 +43,12 @@ class ReportController extends GetxController {
   }
 
   void loadReportsIcons() async {
-    IconSet[0] =//GAS
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
-    IconSet[1] =//LUZ
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
-    IconSet[2] =//AGUA
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow);
+    IconSet[0] = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'images/gas.png');
+    IconSet[1] = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'images/water.png');
+    IconSet[2] = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'images/energy.png');
   }
 
   fetchReports() async {
