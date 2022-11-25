@@ -83,7 +83,7 @@ class NReport_Form extends State<NewReport>
                   MaterialPageRoute(builder: (context) => const ReportPage()),
                 );
               }),
-          backgroundColor: const Color.fromARGB(255, 47, 91, 223),
+          backgroundColor: const Color.fromARGB(255, 88, 154, 220),
         ),
         body: ListView(
           children: [

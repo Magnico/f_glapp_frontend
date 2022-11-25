@@ -23,6 +23,7 @@ class logo extends StatelessWidget {
           ));
     });
     return Scaffold(
+      
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -37,7 +38,7 @@ class logo extends StatelessWidget {
             ),
             GestureDetector(
               child: const Text(
-                'Bienvenido a GlApp',
+                ' ',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -47,6 +48,7 @@ class logo extends StatelessWidget {
           ],
         ),
       ),
+      backgroundColor: const Color.fromARGB(255, 88, 154, 220),
     );
   }
 }

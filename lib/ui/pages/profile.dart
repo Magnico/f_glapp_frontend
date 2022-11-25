@@ -51,7 +51,7 @@ class MapScreenState extends State<ProfilePage>
                 MaterialPageRoute(builder: (context) => const HomePage()),
               );
             }),
-        backgroundColor: const Color.fromARGB(255, 47, 91, 223),
+        backgroundColor: const Color.fromARGB(255, 88, 154, 220),
       ),
       body: Container(
         color: Colors.white,
@@ -77,7 +77,7 @@ class MapScreenState extends State<ProfilePage>
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
-                                      image: ExactAssetImage('images/logo.jpg'),
+                                      image: ExactAssetImage('images/perfil.png'),
                                       fit: BoxFit.cover,
                                     ),
                                   )),
@@ -91,7 +91,7 @@ class MapScreenState extends State<ProfilePage>
                                 children: const <Widget>[
                                   CircleAvatar(
                                     backgroundColor:
-                                        Color.fromARGB(255, 47, 91, 223),
+                                        Color.fromARGB(255, 88, 154, 220),
                                     radius: 25.0,
                                     child: Icon(
                                       Icons.camera_alt,
@@ -125,7 +125,7 @@ class MapScreenState extends State<ProfilePage>
                                   mainAxisSize: MainAxisSize.min,
                                   children: const <Widget>[
                                     Text(
-                                      'Información Personal',
+                                      ' ',
                                       style: TextStyle(
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.bold),

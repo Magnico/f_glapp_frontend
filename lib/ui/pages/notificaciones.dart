@@ -32,7 +32,7 @@ class NotificationPage_Form extends State<NotificationPage> {
                 MaterialPageRoute(builder: (context) => const HomePage()),
               );
             }),
-        backgroundColor: const Color.fromARGB(255, 47, 91, 223),
+        backgroundColor: const Color.fromARGB(255, 88, 154, 220),
       ),
       body: ListView(),
       bottomNavigationBar: BNavigationBar(actual, this),
