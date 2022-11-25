@@ -96,25 +96,28 @@ class ReportController extends GetxController {
         Report report = Report.fromJson(r);
 
         reports.add(report);
-        allMakers.add(
-          Marker(
-            draggable: false,
-            markerId: MarkerId(report.id),
-            position: report.location,
-            icon: IconSet[report.bitmap],
-            infoWindow: InfoWindow(
-              title: report.title,
-              snippet: report.state.name,
-              onTap: () {
-                Navigator.push(
-                    Get.context!,
-                    MaterialPageRoute(
-                      builder: (context) => DetailReportPage(report),
-                    ));
-              },
+        if (report.state != ReportStates.Solucionado &&
+            report.state != ReportStates.Rechazado) {
+          allMakers.add(
+            Marker(
+              draggable: false,
+              markerId: MarkerId(report.id),
+              position: report.location,
+              icon: IconSet[report.bitmap],
+              infoWindow: InfoWindow(
+                title: report.title,
+                snippet: report.state.name,
+                onTap: () {
+                  Navigator.push(
+                      Get.context!,
+                      MaterialPageRoute(
+                        builder: (context) => DetailReportPage(report),
+                      ));
+                },
+              ),
             ),
-          ),
-        );
+          );
+        }
       });
 
       _reports = reports.obs;

@@ -19,7 +19,7 @@ class DetailReportPage extends StatefulWidget {
 }
 
 class MapScreenState extends State<DetailReportPage> {
-  int actual = 3;
+  int actual = 2;
   final FocusNode myFocusNode = FocusNode();
   late ReportStates _toState = ReportStates.values[widget.reporte.state.index];
 
