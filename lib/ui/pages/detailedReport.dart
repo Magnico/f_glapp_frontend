@@ -1,11 +1,10 @@
 import 'package:f_shopping_app/domain/report.dart';
 import 'package:f_shopping_app/domain/reportState.dart';
 import 'package:f_shopping_app/domain/states.dart';
-import 'package:f_shopping_app/ui/Widgets/navBar.dart';
+import 'package:f_shopping_app/ui/Widgets/fnavBar.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
 import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
-import 'package:f_shopping_app/domain/states.dart';
 import 'package:f_shopping_app/ui/pages/reportes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -64,11 +63,7 @@ class MapScreenState extends State<DetailReportPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Icon(
                   con.getIcon(reporte.bitmap),
-                  color: Colors.black,
-                  size: 70,
-                ),
                 Column(
                   children: [
                     Text(
@@ -217,7 +212,7 @@ class MapScreenState extends State<DetailReportPage> {
           ],
         ),
       ),
-      bottomNavigationBar: BNavigationBar(actual, this),
+      bottomNavigationBar: FBNavigationBar(actual, this),
     );
   }
 

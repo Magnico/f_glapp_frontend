@@ -1,15 +1,11 @@
-import 'dart:convert';
 
-import 'package:f_shopping_app/ui/Widgets/navBar.dart';
+import 'package:f_shopping_app/ui/Widgets/fnavBar.dart';
 import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../domain/user.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -82,23 +78,6 @@ class MapScreenState extends State<ProfilePage>
                                   )),
                             ],
                           ),
-                          Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 90.0, right: 100.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const <Widget>[
-                                  CircleAvatar(
-                                    backgroundColor:
-                                        Color.fromARGB(255, 88, 154, 220),
-                                    radius: 25.0,
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                ],
-                              )),
                         ]),
                       )
                     ],
@@ -314,7 +293,7 @@ class MapScreenState extends State<ProfilePage>
           ],
         ),
       ),
-      bottomNavigationBar: BNavigationBar(actual, this),
+      bottomNavigationBar: FBNavigationBar(actual, this),
     );
   }
 

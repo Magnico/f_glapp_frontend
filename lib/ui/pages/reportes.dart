@@ -1,10 +1,11 @@
-import 'package:f_shopping_app/ui/Widgets/navBar.dart';
+import 'package:f_shopping_app/ui/Widgets/fnavBar.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
 import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/detailedReport.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/nuevoReporte.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class ReportPage extends StatefulWidget {
@@ -16,10 +17,10 @@ class ReportPage extends StatefulWidget {
 
 class Report_Form extends State<ReportPage> {
   int actual = 1;
-  List<Icon> serviceIcons = [
-    const Icon(Icons.gas_meter_rounded, color: Colors.black),
-    const Icon(Icons.water_drop, color: Colors.black),
-    const Icon(Icons.lightbulb, color: Colors.black)
+  List serviceIcons = [
+    SvgPicture.asset('images/gasIcon.svg'),
+    SvgPicture.asset('images/waterIcon.svg'),
+    SvgPicture.asset('images/energyIcon.svg'),
   ];
   @override
   Widget build(BuildContext context) {
@@ -82,7 +83,7 @@ class Report_Form extends State<ReportPage> {
             ),
         ],
       ),
-      bottomNavigationBar: BNavigationBar(actual, this),
+      bottomNavigationBar: FBNavigationBar(actual, this),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
@@ -91,7 +92,7 @@ class Report_Form extends State<ReportPage> {
               MaterialPageRoute(builder: (context) => const NewReport()),
             );
           }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
      backgroundColor: Color.fromARGB(255, 173, 208, 244),
     );
   }

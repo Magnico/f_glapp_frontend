@@ -9,6 +9,7 @@ import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/detailedReport.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
@@ -31,10 +32,10 @@ class ReportController extends GetxController {
     BitmapDescriptor.defaultMarker,
     BitmapDescriptor.defaultMarker
   ];
-  List<IconData> serviceIcons = [
-    Icons.gas_meter_rounded,
-    Icons.water_drop,
-    Icons.lightbulb,
+  List serviceIcons = [
+    SvgPicture.asset('images/gasIcon.svg'),
+    SvgPicture.asset('images/waterIcon.svg'),
+    SvgPicture.asset('images/energyIcon.svg'),
   ];
 
   String get currentLocationString => _currentLocation.toString();
@@ -221,7 +222,7 @@ class ReportController extends GetxController {
     }
   }
 
-  IconData getIcon(int bitmap) {
+  SvgPicture getIcon(int bitmap) {
     return serviceIcons[bitmap];
   }
 

@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 
-import 'package:f_shopping_app/ui/Widgets/navBar.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
-import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:f_shopping_app/ui/pages/nuevoReporte.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 
-import '../controller/providerController.dart';
+import '../Widgets/fnavBar.dart';
 
 LatLng currentLocation = const LatLng(0, 0);
 final Completer<GoogleMapController> _controller = Completer();
@@ -66,7 +63,7 @@ class HomeState extends State<HomePage> {
     con.changeLocation(currentLocation);
 
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
@@ -99,7 +96,7 @@ class HomeState extends State<HomePage> {
           //aqui se cierra el obx
         ],
       ),
-      bottomNavigationBar: BNavigationBar(actual, this),
+      bottomNavigationBar: FBNavigationBar(actual, this),
     );
   }
 
@@ -147,21 +144,13 @@ class HomeState extends State<HomePage> {
     setState(() {
       currentLocation = LatLng(position.latitude, position.longitude);
     });
-    awaitChange(1);
+    setState(() {
+      focusMap();
+    });
     return;
   }
 
-  void awaitChange(int a) async {
-    Timer(Duration(milliseconds: 500), () {
-    setState(() {
-      log(con.currentLocationString);
-      focusMap();
-    });
-    });
-  }
-
   void focusMap() async {
-    log("esto es la vida");
     final GoogleMapController controller = await _controller.future;
     log(controller.toString());
     controller.animateCamera(CameraUpdate.newCameraPosition(
