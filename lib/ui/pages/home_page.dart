@@ -49,6 +49,7 @@ class HomeState extends State<HomePage> {
     _googlePlace = GooglePlace(apiKey);
 
     loadActualPosition();
+    log(con.currentLocation.toString());
 
     _searchFocusNode = FocusNode();
   }
@@ -83,11 +84,13 @@ class HomeState extends State<HomePage> {
               initialCameraPosition:
                   CameraPosition(target: currentLocation, zoom: 15),
               onMapCreated: (GoogleMapController controller) async {
-                await con.fetchReports();
-                log('fetch reports');
-                if (!_controller.isCompleted) {
+                log("ayudame deus");
+                 if (!_controller.isCompleted) {
                   _controller.complete(controller);
                 }
+                await con.fetchReports();
+                log('fetch reports');
+               
               },
               markers: con.allMakers.toSet(),
             ));
@@ -144,13 +147,24 @@ class HomeState extends State<HomePage> {
     setState(() {
       currentLocation = LatLng(position.latitude, position.longitude);
     });
-    focusMap();
+    awaitChange(1);
     return;
   }
 
+  void awaitChange(int a) async {
+    Timer(Duration(milliseconds: 500), () {
+    setState(() {
+      log(con.currentLocationString);
+      focusMap();
+    });
+    });
+  }
+
   void focusMap() async {
+    log("esto es la vida");
     final GoogleMapController controller = await _controller.future;
+    log(controller.toString());
     controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: currentLocation, zoom: 15)));
+        CameraPosition(target: con.currentLocation, zoom: 15)));
   }
 }
