@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:f_shopping_app/ui/Widgets/button.dart';
 import 'package:f_shopping_app/ui/Widgets/passwordField.dart';
+import 'package:f_shopping_app/ui/Widgets/textInput.dart';
 import 'package:f_shopping_app/ui/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -40,13 +41,12 @@ class SignUp_Form extends State<SignUp> {
         "name": nameController.text,
         "identification_number": idController.text,
         "role": 1,
-        "number":numController.text,
+        "number": numController.text,
       };
 
       // respuesta de la api
       final response = await post(url, body: jsonEncode(data));
 
-      print(response.body);
       // si la respuesta es 200 (ok)
       if (response.statusCode == 200) {
         final sharedPref = await SharedPreferences.getInstance();
@@ -82,7 +82,7 @@ class SignUp_Form extends State<SignUp> {
               child: Padding(
                 padding: EdgeInsets.only(left: 40.0),
                 child: Text(
-                  "NAME",
+                  "Nombre",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 82, 122, 255),
@@ -95,45 +95,28 @@ class SignUp_Form extends State<SignUp> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+          margin:
+              const EdgeInsets.only(left: 0.0, right: 0.0, top: 5.0, bottom: 5),
           alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                  color: Color.fromARGB(255, 82, 122, 255),
-                  width: 0.5,
-                  style: BorderStyle.solid),
-            ),
-          ),
           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                child: TextField(
-                  controller: nameController,
-                  textAlign: TextAlign.left,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'ingresa tu nombre completo',
-                    hintStyle: TextStyle(color: Colors.grey),
-                  ),
-                ),
+                child: TextInput(nameController, "Ingresa tu nombre completo"),
               ),
             ],
           ),
         ),
-        const Divider(
-          height: 24.0,
-        ),
+        const SizedBox(height: 20),
         Row(
           children: const <Widget>[
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 40.0),
                 child: Text(
-                  "IDENTIFICACIÓN",
+                  "Identificación",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 82, 122, 255),
@@ -146,46 +129,28 @@ class SignUp_Form extends State<SignUp> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+          margin:
+              const EdgeInsets.only(left: 0.0, right: 0.0, top: 5.0, bottom: 5),
           alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                  color: Color.fromARGB(255, 82, 122, 255),
-                  width: 0.5,
-                  style: BorderStyle.solid),
-            ),
-          ),
           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                child: TextField(
-                  controller: idController,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.left,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'ingresa el numero de identificación ',
-                    hintStyle: TextStyle(color: Colors.grey),
-                  ),
-                ),
+                child: TextInput(idController, "Ingresa tu identificación"),
               ),
             ],
           ),
         ),
-        const Divider(
-          height: 24.0,
-        ),
+        const SizedBox(height: 20),
         Row(
           children: const <Widget>[
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 40.0),
                 child: Text(
-                  "TELEFONO",
+                  "Telefono",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 82, 122, 255),
@@ -198,46 +163,29 @@ class SignUp_Form extends State<SignUp> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+          margin:
+              const EdgeInsets.only(left: 0.0, right: 0.0, top: 5.0, bottom: 5),
           alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                  color: Color.fromARGB(255, 82, 122, 255),
-                  width: 0.5,
-                  style: BorderStyle.solid),
-            ),
-          ),
           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                child: TextField(
-                  controller: numController,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.left,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'ingresa el numero telefonico ',
-                    hintStyle: TextStyle(color: Colors.grey),
-                  ),
-                ),
+                child:
+                    TextInput(numController, "Ingresa tu número de telefono"),
               ),
             ],
           ),
         ),
-        const Divider(
-          height: 24.0,
-        ),
+        const SizedBox(height: 20),
         Row(
           children: const <Widget>[
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 40.0),
                 child: Text(
-                  "EMAIL",
+                  "Correo Electronico",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 82, 122, 255),
@@ -250,46 +198,28 @@ class SignUp_Form extends State<SignUp> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+          margin:
+              const EdgeInsets.only(left: 0.0, right: 0.0, top: 5.0, bottom: 5),
           alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                  color: Color.fromARGB(255, 82, 122, 255),
-                  width: 0.5,
-                  style: BorderStyle.solid),
-            ),
-          ),
           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                child: TextField(
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  textAlign: TextAlign.left,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'ingresa tu correo electronico',
-                    hintStyle: TextStyle(color: Colors.grey),
-                  ),
-                ),
+                child: TextInput(emailController, "Ingresa tu email"),
               ),
             ],
           ),
         ),
-        const Divider(
-          height: 24.0,
-        ),
+        const SizedBox(height: 20),
         Row(
           children: const <Widget>[
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 40.0),
                 child: Text(
-                  "CONTRASEÑA",
+                  "Contraseña",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 82, 122, 255),
@@ -302,30 +232,24 @@ class SignUp_Form extends State<SignUp> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+          margin:
+              const EdgeInsets.only(left: 0.0, right: 0.0, top: 5.0, bottom: 0),
           alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                  color: Color.fromARGB(255, 82, 122, 255),
-                  width: 0.5,
-                  style: BorderStyle.solid),
-            ),
-          ),
           padding: const EdgeInsets.only(left: 0.0, right: 10.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [PasswordField(passwordController)],
+            children: <Widget>[
+              Expanded(
+                child: PasswordField(passwordController),
+              ),
+            ],
           ),
         ),
-        const Divider(
-          height: 24.0,
-        ),
-        BTNavigation(MediaQuery.of(context).size.width, const Login(), "SAVE",
-            this, handleSignup),
-        const Divider(
-          height: 24.0,
+        BTNavigation(MediaQuery.of(context).size.width, const Login(),
+            "Guardar", this, handleSignup),
+        const SizedBox(
+          height: 40.0,
         ),
       ]),
     );
