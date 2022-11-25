@@ -32,9 +32,7 @@ class MapScreenState extends State<ProfilePage>
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () async {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-
-              prefs.remove('jwt');
+              user.removeUser();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Login()),
@@ -77,7 +75,8 @@ class MapScreenState extends State<ProfilePage>
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
-                                      image: ExactAssetImage('images/perfil.png'),
+                                      image:
+                                          ExactAssetImage('images/perfil.png'),
                                       fit: BoxFit.cover,
                                     ),
                                   )),

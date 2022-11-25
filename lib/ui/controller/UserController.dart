@@ -26,9 +26,9 @@ class UserController extends GetxController {
     final userJson = prefs.getString('user');
     final jwt = prefs.getString('jwt');
 
+    print(jwt);
     if (userJson != null) {
       final user = User.fromJson(jsonDecode(userJson));
-
       _name.value = user.name;
       _email.value = user.email;
       _identificationNumber.value = user.identification_number;
@@ -36,5 +36,12 @@ class UserController extends GetxController {
       _jwt.value = jwt!;
       _role.value = user.role;
     }
+  }
+
+  void removeUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.remove('jwt');
+    prefs.remove('user');
   }
 }

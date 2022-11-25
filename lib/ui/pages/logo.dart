@@ -19,11 +19,10 @@ class logo extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                controller.jwt != null ? const HomePage() : const Login(),
+                !controller.jwt.isEmpty ? const HomePage() : const Login(),
           ));
     });
     return Scaffold(
-      
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
