@@ -78,16 +78,16 @@ class HomeState extends State<HomePage> {
             return Expanded(
                 child: GoogleMap(
               mapType: MapType.normal,
+              zoomControlsEnabled: false,
               initialCameraPosition:
                   CameraPosition(target: currentLocation, zoom: 15),
               onMapCreated: (GoogleMapController controller) async {
                 log("ayudame deus");
-                 if (!_controller.isCompleted) {
+                if (!_controller.isCompleted) {
                   _controller.complete(controller);
                 }
                 await con.fetchReports();
                 log('fetch reports');
-               
               },
               markers: con.allMakers.toSet(),
             ));

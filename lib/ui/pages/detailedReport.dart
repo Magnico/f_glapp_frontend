@@ -42,7 +42,7 @@ class MapScreenState extends State<DetailReportPage> {
     bool _isEnterprise = user.role == 0;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Reporte - ${reporte.id}"),
+        title: Text("Vista Detallada Del Reporte"),
         leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -63,7 +63,7 @@ class MapScreenState extends State<DetailReportPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                  con.getIcon(reporte.bitmap),
+                con.getIcon(reporte.bitmap),
                 Column(
                   children: [
                     Text(
