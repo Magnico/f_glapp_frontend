@@ -19,14 +19,14 @@ class SignUp extends StatefulWidget {
 }
 
 class SignUp_Form extends State<SignUp> {
+  final nameController = TextEditingController();
+  final idController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final numController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final nameController = TextEditingController();
-    final idController = TextEditingController();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final numController = TextEditingController();
-
     handleSignup() async {
       // url base de la api
       // final API_URL = "https://glapp-api.herokuapp.com";
