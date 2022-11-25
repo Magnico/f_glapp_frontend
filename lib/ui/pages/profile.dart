@@ -19,7 +19,7 @@ class ProfilePage extends StatefulWidget {
 
 class MapScreenState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
-  int actual = 3;
+  int actual = 2;
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
   UserController user = Get.find<UserController>();

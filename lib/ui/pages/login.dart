@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:f_shopping_app/domain/auth.dart';
 import 'package:f_shopping_app/ui/Widgets/button.dart';
 import 'package:f_shopping_app/ui/Widgets/passwordField.dart';
+import 'package:f_shopping_app/ui/Widgets/textInput.dart';
 import 'package:f_shopping_app/ui/controller/ReportController.dart';
 import 'package:f_shopping_app/ui/controller/UserController.dart';
 import 'package:f_shopping_app/ui/pages/home_page.dart';
@@ -82,6 +83,9 @@ class Login_Form extends State<Login> {
       resizeToAvoidBottomInset: false,
       body: ListView(children: [
         //Icon profile 300x300 px
+        SizedBox(
+          height: 30,
+        ),
         const Icon(
           Icons.account_circle,
           size: 200,
@@ -92,9 +96,9 @@ class Login_Form extends State<Login> {
           children: const <Widget>[
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 40.0),
+                padding: EdgeInsets.only(left: 40.0, top: 40),
                 child: Text(
-                  "EMAIL",
+                  "Correo electronico",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 82, 122, 255),
@@ -105,39 +109,9 @@ class Login_Form extends State<Login> {
             ),
           ],
         ),
-        Container(
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                  color: Color.fromARGB(255, 82, 122, 255),
-                  width: 0.5,
-                  style: BorderStyle.solid),
-            ),
-          ),
-          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: TextField(
-                  controller: emailController,
-                  textAlign: TextAlign.left,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'glapp@gmail.com',
-                    hintStyle: TextStyle(color: Colors.grey),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const Divider(
-          height: 24.0,
+        TextInput(emailController, "user@glap.com"),
+        const SizedBox(
+          height: 20,
         ),
         Row(
           children: const <Widget>[
@@ -145,7 +119,7 @@ class Login_Form extends State<Login> {
               child: Padding(
                 padding: EdgeInsets.only(left: 40.0),
                 child: Text(
-                  "PASSWORD",
+                  "Contraseña",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 82, 125, 255),
@@ -158,58 +132,28 @@ class Login_Form extends State<Login> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+          margin: const EdgeInsets.only(
+              left: 40.0, right: 40.0, top: 10.0, bottom: 20),
           alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                  color: Color.fromARGB(255, 82, 131, 255),
-                  width: 0.5,
-                  style: BorderStyle.solid),
-            ),
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(5.0),
+            border: Border.all(
+                color: const Color(0xFFB3B3B3),
+                width: 1.0,
+                style: BorderStyle.solid),
           ),
-          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+          padding: const EdgeInsets.only(left: 10.0, right: 2.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[PasswordField(passwordController)],
           ),
         ),
-        const Divider(
-          height: 24.0,
-        ),
         BTNavigation(MediaQuery.of(context).size.width, const HomePage(),
-            "Login", this, handleLogin),
-        Container(
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
-          alignment: Alignment.center,
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(border: Border.all(width: 0.25)),
-                ),
-              ),
-              const Text(
-                "OR ",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(border: Border.all(width: 0.25)),
-                ),
-              ),
-            ],
-          ),
-        ),
+            "Ingresar", this, handleLogin),
         BTNavigation(MediaQuery.of(context).size.width, const SignUp(),
-            "Sign Up", this, null),
+            "Registrarse", this, null),
       ]),
     );
   }

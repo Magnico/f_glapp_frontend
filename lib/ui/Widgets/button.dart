@@ -17,7 +17,7 @@ class BTNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: parentWidth,
-      margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
+      margin: const EdgeInsets.only(left: 120.0, right: 120.0, top: 20.0),
       alignment: Alignment.center,
       child: Row(
         children: <Widget>[
@@ -25,9 +25,9 @@ class BTNavigation extends StatelessWidget {
             child: TextButton(
               style: TextButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(7.0),
                 ),
-                backgroundColor: Color.fromARGB(255, 81, 204, 184),
+                backgroundColor: const Color(0XFF60C8C0),
               ),
               onPressed: () {
                 callback != null
@@ -39,8 +39,8 @@ class BTNavigation extends StatelessWidget {
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                  vertical: 20.0,
-                  horizontal: 50.0,
+                  vertical: 7.0,
+                  horizontal: 0.0,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -50,7 +50,9 @@ class BTNavigation extends StatelessWidget {
                         text,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
                       ),
                     ),
                   ],

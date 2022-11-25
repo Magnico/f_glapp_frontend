@@ -24,7 +24,7 @@ class _PasswordFieldState extends State<PasswordField> {
         textAlign: TextAlign.left,
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: 'crea una nueva contraseña',
+          hintText: 'Ingresa tu contraseña',
           hintStyle: TextStyle(color: Colors.grey),
           suffixIcon: InkWell(
             onTap: () => setState(() => {

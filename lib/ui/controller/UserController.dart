@@ -42,5 +42,12 @@ class UserController extends GetxController {
 
     prefs.remove('jwt');
     prefs.remove('user');
+
+    _name.value = "";
+    _email.value = "";
+    _identificationNumber.value = "";
+    _id.value = "";
+    _jwt.value = "";
+    _role.value = 0;
   }
 }
