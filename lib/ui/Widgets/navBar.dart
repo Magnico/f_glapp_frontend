@@ -2,6 +2,7 @@ import 'package:f_shopping_app/ui/pages/home_page.dart';
 import 'package:f_shopping_app/ui/pages/notificaciones.dart';
 import 'package:f_shopping_app/ui/pages/reportes.dart';
 import 'package:f_shopping_app/ui/pages/profile.dart';
+import 'package:f_shopping_app/utils/hexColor.dart';
 import 'package:flutter/material.dart';
 
 class BNavigationBar extends StatelessWidget {
@@ -10,10 +11,9 @@ class BNavigationBar extends StatelessWidget {
   var reference;
 
   List<Widget> paginas = [
-    HomePage(),
-    ReportPage(),
-    NotificationPage(),
-    ProfilePage(),
+    const HomePage(),
+    const ReportPage(),
+    const ProfilePage(),
   ];
   int actual;
   //Function(int) onTap;
@@ -21,7 +21,7 @@ class BNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Color.fromARGB(255, 88, 154, 220),
+      backgroundColor: const Color.fromRGBO(4, 93, 185, 1.000),
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.white.withOpacity(.60),
       selectedFontSize: 14,
@@ -46,10 +46,6 @@ class BNavigationBar extends StatelessWidget {
         BottomNavigationBarItem(
           label: 'Reportes',
           icon: Icon(Icons.receipt),
-        ),
-        BottomNavigationBarItem(
-          label: 'Notificaciones',
-          icon: Icon(Icons.notifications),
         ),
         BottomNavigationBarItem(
           label: 'Perfil',

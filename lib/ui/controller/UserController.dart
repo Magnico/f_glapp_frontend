@@ -26,7 +26,6 @@ class UserController extends GetxController {
     final userJson = prefs.getString('user');
     final jwt = prefs.getString('jwt');
 
-    print(jwt);
     if (userJson != null) {
       final user = User.fromJson(jsonDecode(userJson));
       _name.value = user.name;
